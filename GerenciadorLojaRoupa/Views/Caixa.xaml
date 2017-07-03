@@ -1,27 +1,54 @@
-﻿<Page x:Class="GerenciadorLojaRoupa.Views.Caixa"
+﻿<Page x:Class="KikaKidsModa.Views.Caixa"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:GerenciadorLojaRoupa.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="Caixa">
+      xmlns:local="clr-namespace:KikaKidsModa.Views"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      mc:Ignorable="d" Background="White"
+      d:DesignHeight="500" d:DesignWidth="700"
+      Title="Caixa" Loaded="Page_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
         <GroupBox Margin="5" BorderBrush="SteelBlue" Header="Entrada">
-            
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                    <TextBlock Text="Valor para Abrir Caixa: "/>
+                    <xctk:DoubleUpDown x:Name="CampoAbertura" MinWidth="70" Minimum="0"/>
+                </StackPanel>
+                <Button x:Name="BotaoAbrir" Click="BotaoAbrir_Click" Content="Abrir Caixa" Template="{DynamicResource ButtonTemplate}" Margin="3"/>
+                <TextBlock x:Name="MudarValorAbertura" Text="Mudar valor de abertura" TextAlignment="Center" TextDecorations="Underline" MouseLeftButtonUp="MudarValorAbertura_MouseLeftButtonUp" Cursor="Hand"/>
+            </StackPanel>
         </GroupBox>
         <GroupBox Margin="5" BorderBrush="SteelBlue" Header="Saída" Grid.Column="1">
-
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                        <TextBlock Text="Valor para Fechar Caixa: "/>
+                        <xctk:DoubleUpDown x:Name="CampoFechamento" MinWidth="70" Minimum="0"/>
+                    </StackPanel>
+                    <Button x:Name="BotaoFechar" Click="BotaoFechar_Click" Content="Fechar Caixa" Template="{DynamicResource ButtonTemplate}" Margin="3"/>
+                    <TextBlock x:Name="Sangria" Text="Fazer uma sangria de caixa" TextAlignment="Center" TextDecorations="Underline" MouseLeftButtonUp="Sangria_MouseLeftButtonUp" Cursor="Hand"/>
+                    <GroupBox Name="GroupSangria" Header="Sangria" Visibility="Collapsed" BorderBrush="SteelBlue">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Valor da sangria: " HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <xctk:DoubleUpDown Name="ValorSangria" Minimum="0" Grid.Column="1"/>
+                            <Button Name="RealizarSangria" Click="RealizarSangria_Click" Content="Realizar Sangria" Template="{DynamicResource ButtonTemplate}" Grid.Row="1" Grid.ColumnSpan="2" Margin="3"/>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </StackPanel>
         </GroupBox>
-        <Button Grid.Row="1" Click="Button_Click" Content="Abrir Caixa" Template="{DynamicResource ButtonTemplate}" Margin="3"/>
     </Grid>
 </Page>

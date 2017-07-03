@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace GerenciadorLojaRoupa.Views
+namespace KikaKidsModa.Views
 {
     /// <summary>
     /// Interaction logic for CircularProgressBar.xaml

@@ -1,0 +1,76 @@
+﻿<Page x:Class="KikaKidsModa.Views.Produto"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KikaKidsModa.Views"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="600" Background="White" Loaded="Page_Loaded"
+      Title="Produto">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.RowSpan="2">
+            <TextBlock Text="Lista de Produtos" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
+            <DockPanel DockPanel.Dock="Bottom">
+                <StackPanel DockPanel.Dock="Bottom">
+                    <TextBox x:Name="CampoBuscaNome" Style="{StaticResource placeHolder}" Tag="Buscar produto pelo nome" Padding="3,0,3,0" Width="150" TextChanged="CampoBuscaNome_TextChanged"/>
+                    <TextBox x:Name="CampoBuscaCodigo" Style="{StaticResource placeHolder}" Tag="Buscar produto pelo código" Padding="3,0,3,0" Width="150" TextChanged="CampoBuscaCodigo_TextChanged"/>
+                    <Button Name="BotaoBuscaCodigo" Template="{DynamicResource ButtonTemplate}" Content="Escanear Código de Barras" Padding="3,0,3,0" Width="150"/>
+                </StackPanel>
+                <ListView x:Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nome}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+        </DockPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,3,0,3">
+            <Button x:Name="Novo" Template="{DynamicResource ButtonTemplateLeft}" Content="Novo" Padding="3" Click="Novo_Click"/>
+            <Button x:Name="Alterar" Template="{DynamicResource ButtonTemplateCenter}" Content="Alterar" Padding="5" Click="Alterar_Click"/>
+            <Button x:Name="Deletar" Template="{DynamicResource ButtonTemplateRight}" Content="Deletar" Padding="5" Click="Deletar_Click"/>
+        </StackPanel>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Código:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBox Name="CampoCodigo" Grid.Column="1" VerticalAlignment="Center" Height="23" TextChanged="CampoCodigo_TextChanged" MaxLength="50"/>
+            <TextBlock Text="Nome:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2"/>
+            <TextBox Name="CampoNome" Grid.Column="3" VerticalAlignment="Center" Height="23" TextChanged="CampoNome_TextChanged" MaxLength="20"/>
+            <TextBlock Text="Descrição:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1"/>
+            <TextBox Name="CampoDescricao" Height="100" VerticalScrollBarVisibility="Visible" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" TextChanged="CampoDescricao_TextChanged" MaxLength="50"/>
+            <TextBlock Text="Tamanho:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2"/>
+            <ComboBox Name="CampoTamanho" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Height="23" SelectionChanged="CampoTamanho_SelectionChanged">
+                <ComboBoxItem Content="P"/>
+                <ComboBoxItem Content="M"/>
+                <ComboBoxItem Content="G"/>
+                <ComboBoxItem Content="GG"/>
+            </ComboBox>
+            <TextBlock Text="Quantidade:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2"/>
+            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" ValueChanged="CampoQuantidade_ValueChanged" Minimum="0"/>
+            <TextBlock Text="Valor:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
+            <xctk:DoubleUpDown Name="CampoValor" ValueChanged="CampoValor_ValueChanged" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Height="23" Minimum="0"/>
+            <Button Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
+        </Grid>
+    </Grid>
+</Page>

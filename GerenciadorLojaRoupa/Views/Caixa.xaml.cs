@@ -13,21 +13,122 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GerenciadorLojaRoupa.Views
+namespace KikaKidsModa.Views
 {
     /// <summary>
     /// Interaction logic for Caixa.xaml
     /// </summary>
     public partial class Caixa : Page
     {
-        public Caixa()
+        Model.Caixa caixa;
+        bool abrir;
+
+        public Caixa(bool abrir = true)
         {
             InitializeComponent();
+            if (Main.usuarioLogado.NivelAcesso == "Administrador")
+            {
+                CampoAbertura.IsEnabled = abrir;
+                BotaoAbrir.IsEnabled = abrir;
+                CampoFechamento.IsEnabled = !abrir;
+                BotaoFechar.IsEnabled = !abrir;
+                MudarValorAbertura.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CampoAbertura.IsEnabled = false;
+                BotaoAbrir.IsEnabled = false;
+                CampoFechamento.IsEnabled = false;
+                BotaoFechar.IsEnabled = false;
+                MudarValorAbertura.Visibility = Visibility.Collapsed;
+            }
+            this.abrir = abrir;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private async void BotaoAbrir_Click(object sender, RoutedEventArgs e)
         {
-            Main.HM.Visibility = Visibility.Visible;
+            if (CampoAbertura.Value.HasValue)
+            {
+                caixa.ValorAbertura = CampoAbertura.Value.Value;
+                await Control.CaixaControl.Update(caixa);
+                Main.HM.Visibility = Visibility.Visible;
+                Main.MainFrame.Navigate(new Home());
+            }
+            else
+            {
+                MessageBox.Show("Não há valor inserido", "Aviso");
+            }
+        }
+
+        private async void BotaoFechar_Click(object sender, RoutedEventArgs e)
+        {
+            if (CampoFechamento.Value.HasValue)
+            {
+                caixa.ValorFechamento = CampoFechamento.Value.Value;
+                await Control.CaixaControl.Update(caixa);
+                Environment.Exit(0);
+            }
+            else
+            {
+                MessageBox.Show("Não há valor inserido", "Aviso");
+            }
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if ((await Synchro.tbCaixa.ReadAsync())
+                .Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).Count() == 0)
+            {
+                var c = new Model.Caixa()
+                {
+                    DataCaixa = DateTime.Today.ToShortDateString(),
+                    HoraAbertura = DateTime.Now.ToShortTimeString()
+                };
+                await Control.CaixaControl.Insert(c);
+                caixa = c;
+                CampoAbertura.Value = 0;
+            }
+            else
+            {
+                caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
+                CampoAbertura.Value = caixa.ValorAbertura;
+                ValorSangria.Value = caixa.ValorSangria;
+                if (caixa.ValorAbertura != 0 && abrir)
+                {
+                    Main.HM.Visibility = Visibility.Visible;
+                    Main.MainFrame.Navigate(new Home());
+                }
+            }
+        }
+
+        private void MudarValorAbertura_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CampoAbertura.IsEnabled = true;
+            BotaoAbrir.IsEnabled = true;
+            CampoFechamento.IsEnabled = false;
+            BotaoFechar.IsEnabled = false;
+        }
+
+        private void Sangria_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!abrir)
+            {
+                if (GroupSangria.Visibility == Visibility.Visible)
+                    GroupSangria.Visibility = Visibility.Collapsed;
+                else
+                    GroupSangria.Visibility = Visibility.Visible;
+            }
+        }
+
+        private async void RealizarSangria_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValorSangria.Value.HasValue)
+            {
+                caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
+                caixa.ValorSangria = ValorSangria.Value.Value;
+                await Control.CaixaControl.Update(caixa);
+            }
         }
     }
 }

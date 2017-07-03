@@ -1,13 +1,13 @@
-﻿<Window x:Class="GerenciadorLojaRoupa.Main"
+﻿<Window x:Class="KikaKidsModa.Main"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GerenciadorLojaRoupa"
+        xmlns:local="clr-namespace:KikaKidsModa"
         xmlns:hb="clr-namespace:HamburgerMenu;assembly=HamburgerMenu"
-        xmlns:views="clr-namespace:GerenciadorLojaRoupa.Views"
+        xmlns:views="clr-namespace:KikaKidsModa.Views"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="200" MinWidth="300" WindowStyle="None"
+        Title="MainWindow" MinHeight="700" MinWidth="700" WindowStyle="None" Background="SteelBlue"
         ResizeMode="CanResizeWithGrip" ContentRendered="Janela_ContentRendered">
     <Window.Resources>
         <Style x:Name="topButton" TargetType="Button">
@@ -17,14 +17,7 @@
     </Window.Resources>
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Height="Auto" Background="SteelBlue" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" MouseLeftButtonUp="TitleBar_MouseLeftButtonUp" MouseMove="TitleBar_MouseMove">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="botaoVoltar" Width="50" Height="29" Visibility="Collapsed" Click="botaoVoltar_Click">
-                    <Button.Content>
-                        <Image Source="Imagens/Back-32.png" />
-                    </Button.Content>
-                </Button>
-                <Label Content="Gerenciador" Margin="10,0,0,0" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
-            </StackPanel>
+            <Label Content="Gerenciador Kika Kids Moda" Margin="10,0,0,0" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <Button x:Name="botaoMinimizar" Click="minimizar_Click" Width="29">
                     <Button.Content>
@@ -53,15 +46,22 @@
             </StackPanel>
             <Frame x:Name="Root" 
                    Margin="50,0,0,0"
-                   NavigationUIVisibility="Hidden"
-                   Navigated="Root_Navigated"/>
+                   NavigationUIVisibility="Hidden"/>
             <hb:HamburgerMenu x:Name="Hamburger"
                               Visibility="Collapsed"
                               Background="SteelBlue"
                               HorizontalAlignment="Left"
                               SelectionIndicatorColor="White"
                               MenuItemForeground="LightBlue">
-                <hb:HamburgerMenuItem Text="Página Principal" Selected="Home_Selected" IsSelected="False" Icon="Imagens/Home-32.png"/>
+                <hb:HamburgerMenuItem Text="Página Principal" Foreground="White" Selected="Home_Selected" IsSelected="False" Icon="Imagens/Home-32.png"/>
+                <hb:HamburgerMenuItem Text="Abrir/Fechar Caixa" Foreground="White" Selected="AbrirFecharCaixa_Selected" Icon="Imagens/Door-32.png"/>
+                <hb:HamburgerMenuItem x:Name="HMuser" Text="Usuários" Foreground="White" Selected="Usuarios_Selected" Icon="Imagens/User Menu-32.png"/>
+                <hb:HamburgerMenuItem Text="Gerenciar Produtos" Foreground="White" Selected="Produtos_Selected" Icon="Imagens/Clothes-32.png"/>
+                <hb:HamburgerMenuItem Text="Gerenciar Vendedores" Foreground="White" Selected="Vendedores_Selected" Icon="Imagens/Delivery-32.png"/>
+                <hb:HamburgerMenuItem Text="Retirada de Produtos" Foreground="White" Selected="Retirada_Selected" Icon="Imagens/Shop-32.png"/>
+                <hb:HamburgerMenuItem Text="Gerenciar Clientes" Foreground="White" Selected="Clientes_Selected" Icon="Imagens/Queue-32.png"/>
+                <hb:HamburgerMenuItem Text="Vender Produto" Foreground="White" Selected="Vender_Selected" Icon="Imagens/Price-32.png"/>
+                <hb:HamburgerMenuItem Text="Trocar Usuário" Foreground="White" Selected="TrocarUsuario_Selected" Icon="Imagens/User-32.png"/>
             </hb:HamburgerMenu>
         </Grid>
     </DockPanel>

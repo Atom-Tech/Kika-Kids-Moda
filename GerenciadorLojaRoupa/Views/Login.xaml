@@ -1,0 +1,35 @@
+﻿<Page x:Class="KikaKidsModa.Views.Login"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KikaKidsModa.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="Login" Background="White" Loaded="Page_Loaded">
+    <Border BorderBrush="SteelBlue" BorderThickness="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Digite o seu login e sua senha para acessar as funções do programa" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Login: " VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10"/>
+                <TextBox x:Name="CampoLogin" Grid.Column="2" Margin="10,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" MinWidth="100"/>
+                <TextBlock Text="Senha: " VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0" Grid.Row="2"/>
+                <PasswordBox x:Name="CampoSenha" Grid.Column="2" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinWidth="100" Grid.Row="2" PasswordChar="*"/>
+            </Grid>
+            <Button x:Name="BotaoLogin" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="30" MinWidth="70" Content="Entrar" Template="{DynamicResource ButtonTemplate}" Click="BotaoLogin_Click" IsDefault="True"/>
+        </Grid>
+    </Border>
+</Page>

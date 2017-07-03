@@ -1,4 +1,5 @@
-﻿using GerenciadorLojaRoupa.Views;
+﻿using KikaKidsModa.Views;
+using KikaKidsModa;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GerenciadorLojaRoupa
+namespace KikaKidsModa
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,21 +23,25 @@ namespace GerenciadorLojaRoupa
     public partial class Main : Window
     {
         public static bool x = false;
-        public Frame MainFrame;
+        public static Frame MainFrame;
         public static HamburgerMenu.HamburgerMenu HM;
+        public static HamburgerMenu.HamburgerMenuItem HMUser;
         public static double entrada = 0.00;
+        public static Model.Usuario usuarioLogado;
 
         public Main()
         {
             InitializeComponent();
             MainFrame = Root;
             HM = Hamburger;
+            HMUser = HMuser;
         }
 
-        private void Janela_ContentRendered(object sender, EventArgs e)
+        private async void Janela_ContentRendered(object sender, EventArgs e)
         {
+            await Synchro.InitLocalStoreAsync();
             Loading.Visibility = Visibility.Collapsed;
-            Root.Navigate(new Caixa());
+            Root.Navigate(new Login());
         }
 
         double width, height;
@@ -87,23 +92,50 @@ namespace GerenciadorLojaRoupa
             _isMouseDown = true;
             this.DragMove();
         }
-
-        private void Root_Navigated(object sender, NavigationEventArgs e)
-        {
-            if (Root.CanGoBack)
-                botaoVoltar.Visibility = Visibility.Visible;
-            else
-                botaoVoltar.Visibility = Visibility.Collapsed;
-        }
-
-        private void botaoVoltar_Click(object sender, RoutedEventArgs e)
-        {
-            Root.GoBack();
-        }
-
+        
         private void Home_Selected(object sender, RoutedEventArgs e)
         {
-            if (x) Root.Navigate(new Page());
+            if (x) Root.Navigate(new Home());
+        }
+        
+        private void AbrirFecharCaixa_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Caixa(false));
+        }
+
+        private void TrocarUsuario_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Login());
+        }
+
+        private void Usuarios_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Usuario());
+        }
+
+        private void Produtos_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Produto());
+        }
+
+        private void Vendedores_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Vendedor());
+        }
+
+        private void Retirada_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Retirada());
+        }
+
+        private void Vender_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Clientes_Selected(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
