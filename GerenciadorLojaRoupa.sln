@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorLojaRoupa", "GerenciadorLojaRoupa\GerenciadorLojaRoupa.csproj", "{0370DD83-3B04-4EC7-A868-9F13ECECCA29}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KikaKidsSetup", "KikaKidsSetup\KikaKidsSetup.vdproj", "{8A3C20A4-C6BC-4060-ACC0-8C0DD26D3630}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{0370DD83-3B04-4EC7-A868-9F13ECECCA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0370DD83-3B04-4EC7-A868-9F13ECECCA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0370DD83-3B04-4EC7-A868-9F13ECECCA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A3C20A4-C6BC-4060-ACC0-8C0DD26D3630}.Debug|Any CPU.ActiveCfg = Debug
+		{8A3C20A4-C6BC-4060-ACC0-8C0DD26D3630}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

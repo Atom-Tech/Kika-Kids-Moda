@@ -39,9 +39,17 @@ namespace KikaKidsModa
 
         private async void Janela_ContentRendered(object sender, EventArgs e)
         {
-            await Synchro.InitLocalStoreAsync();
-            Loading.Visibility = Visibility.Collapsed;
-            Root.Navigate(new Login());
+            try
+            {
+                await Synchro.InitLocalStoreAsync();
+                Loading.Visibility = Visibility.Collapsed;
+                Root.Navigate(new Login());
+            }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                MessageBox.Show("Não há conexão com internet");
+                Environment.Exit(0);
+            }
         }
 
         double width, height;
