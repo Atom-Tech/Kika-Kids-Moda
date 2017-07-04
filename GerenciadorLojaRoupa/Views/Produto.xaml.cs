@@ -169,7 +169,7 @@ namespace KikaKidsModa.Views
 
         public async Task<bool> SemUnique()
         {
-            return (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == Prod.Codigo).Count() == 0;
+            return (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == Prod.Codigo && p.Id != Prod?.Id).Count() == 0;
         }
 
         public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoCodigo.Text != "" && CampoTamanho.Text != ""

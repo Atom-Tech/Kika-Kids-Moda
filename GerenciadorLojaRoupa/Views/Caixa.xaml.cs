@@ -30,7 +30,6 @@ namespace KikaKidsModa.Views
             {
                 CampoAbertura.IsEnabled = abrir;
                 BotaoAbrir.IsEnabled = abrir;
-                CampoFechamento.IsEnabled = !abrir;
                 BotaoFechar.IsEnabled = !abrir;
                 MudarValorAbertura.Visibility = Visibility.Visible;
             }
@@ -38,7 +37,6 @@ namespace KikaKidsModa.Views
             {
                 CampoAbertura.IsEnabled = false;
                 BotaoAbrir.IsEnabled = false;
-                CampoFechamento.IsEnabled = false;
                 BotaoFechar.IsEnabled = false;
                 MudarValorAbertura.Visibility = Visibility.Collapsed;
             }
@@ -77,6 +75,7 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
             if ((await Synchro.tbCaixa.ReadAsync())
                 .Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).Count() == 0)
             {
@@ -94,11 +93,28 @@ namespace KikaKidsModa.Views
                 caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
                 CampoAbertura.Value = caixa.ValorAbertura;
                 ValorSangria.Value = caixa.ValorSangria;
+                var valor = vendasHoje.Sum(v => v.Valor);
+                CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
                 if (caixa.ValorAbertura != 0 && abrir)
                 {
                     Main.HM.Visibility = Visibility.Visible;
                     Main.MainFrame.Navigate(new Home());
                 }
+            }
+            if (vendasHoje.Count() > 0)
+            {
+                string vendas = "";
+                foreach (var v in vendasHoje)
+                {
+                    vendas += $"\n{v.QuantidadeProduto} unidades de " +
+                        $"{await Model.Produto.GetNome(v.CodigoProduto)} foi vendido para " +
+                        $"{await Model.Cliente.GetNome(v.CPFCliente)} por R${v.Valor}";
+                }
+                Vendas.Text = vendas;
+            }
+            else
+            {
+                Vendas.Text = "Sem Vendas";
             }
         }
 
@@ -128,6 +144,9 @@ namespace KikaKidsModa.Views
                 caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
                 caixa.ValorSangria = ValorSangria.Value.Value;
                 await Control.CaixaControl.Update(caixa);
+                var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
+                var valor = vendasHoje.Sum(v => v.Valor);
+                CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
             }
         }
     }

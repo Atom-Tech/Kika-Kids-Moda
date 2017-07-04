@@ -61,6 +61,7 @@
       <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.2\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -157,6 +158,8 @@
     </ApplicationDefinition>
     <Compile Include="Control\ProdutoControl.cs" />
     <Compile Include="Control\RetiradaControl.cs" />
+    <Compile Include="Control\VendaControl.cs" />
+    <Compile Include="Control\ClienteControl.cs" />
     <Compile Include="Control\VendedorControl.cs" />
     <Compile Include="Control\UsuarioControl.cs" />
     <Compile Include="Control\CaixaControl.cs" />
@@ -176,6 +179,9 @@
     <Compile Include="Views\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Cliente.xaml.cs">
+      <DependentUpon>Cliente.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
@@ -190,6 +196,9 @@
     </Compile>
     <Compile Include="Views\Usuario.xaml.cs">
       <DependentUpon>Usuario.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Venda.xaml.cs">
+      <DependentUpon>Venda.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Vendedor.xaml.cs">
       <DependentUpon>Vendedor.xaml</DependentUpon>
@@ -214,6 +223,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Cliente.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Home.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Usuario.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Venda.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -20,6 +20,8 @@ namespace KikaKidsModa
         public static IMobileServiceSyncTable<Produto> tbProduto { get; } = App.banco.GetSyncTable<Produto>();
         public static IMobileServiceSyncTable<Vendedor> tbVendedor { get; } = App.banco.GetSyncTable<Vendedor>();
         public static IMobileServiceSyncTable<Retirada> tbRetirada { get; } = App.banco.GetSyncTable<Retirada>();
+        public static IMobileServiceSyncTable<Cliente> tbCliente { get; } = App.banco.GetSyncTable<Cliente>();
+        public static IMobileServiceSyncTable<Venda> tbVenda { get; } = App.banco.GetSyncTable<Venda>();
 
         public static async Task InitLocalStoreAsync()
         {
@@ -33,6 +35,8 @@ namespace KikaKidsModa
                 store.DefineTable<Produto>();
                 store.DefineTable<Vendedor>();
                 store.DefineTable<Retirada>();
+                store.DefineTable<Cliente>();
+                store.DefineTable<Venda>();
                 await App.banco.SyncContext.InitializeAsync(store);
             }
             await SyncAsync();
@@ -46,6 +50,8 @@ namespace KikaKidsModa
             await tbProduto.PullAsync("tbProduto", tbProduto.CreateQuery());
             await tbVendedor.PullAsync("tbVendedor", tbVendedor.CreateQuery());
             await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
+            await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
+            await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
         }
     }
 }

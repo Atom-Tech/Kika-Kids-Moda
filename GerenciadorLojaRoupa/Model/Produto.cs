@@ -24,5 +24,10 @@ namespace KikaKidsModa.Model
         public int Quantidade { get; set; }
         [JsonProperty(PropertyName = "vlProduto")]
         public double Valor { get; set; }
+
+        public static async Task<string> GetNome(string codigo)
+        {
+            return (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == codigo).First().Nome;
+        }
     }
 }

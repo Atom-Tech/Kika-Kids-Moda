@@ -43,8 +43,9 @@ namespace KikaKidsModa.Views
             {
                 Ret = (Model.Retirada)Lista.SelectedItem;
                 await Ret.Load();
+                CampoQuantidade.Maximum = Ret.Produto.Quantidade;
                 CampoQuantidade.Value = Ret.Quantidade;
-                CampoValor.Value = Ret.ValorUnitario;
+                CampoValor.Value = Ret.ValorEntrada;
                 CampoData.Text = Ret.Data;
                 Retornado.IsChecked = Ret.Retornado;
                 foreach (Model.Produto p in ListaProdutos.Items)
@@ -73,6 +74,8 @@ namespace KikaKidsModa.Views
             {
                 Ret.Produto = (Model.Produto)ListaProdutos.SelectedItem;
                 Ret.CodigoProduto = Ret.Produto.Codigo;
+                CampoQuantidade.Maximum = Ret.Produto.Quantidade;
+                if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
             }
         }
 
@@ -145,26 +148,20 @@ namespace KikaKidsModa.Views
             return false;
         }
 
-        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0 
+        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0
             && Ret.CodigoProduto != null && Ret.CPFVendedor != null;
 
         private void CampoQuantidade_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
             Ret.Quantidade = CampoQuantidade.Value.Value;
-            CalcularValorTotal();
         }
 
         private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Ret.ValorUnitario = CampoValor.Value.Value;
-            CalcularValorTotal();
+            Ret.ValorEntrada = CampoValor.Value.Value;
         }
-
-        public void CalcularValorTotal()
-        {
-            Ret.ValorTotal = Ret.Quantidade * Ret.ValorUnitario;
-            CampoValorTotal.Value = Ret.ValorTotal;
-        }
+        
 
         private void Retornado_Checked(object sender, RoutedEventArgs e)
         {

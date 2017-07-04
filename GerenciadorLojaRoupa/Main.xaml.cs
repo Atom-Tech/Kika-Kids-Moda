@@ -130,12 +130,12 @@ namespace KikaKidsModa
 
         private void Vender_Selected(object sender, RoutedEventArgs e)
         {
-
+            Root.Navigate(new Venda());
         }
 
         private void Clientes_Selected(object sender, RoutedEventArgs e)
         {
-
+            Root.Navigate(new Cliente());
         }
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

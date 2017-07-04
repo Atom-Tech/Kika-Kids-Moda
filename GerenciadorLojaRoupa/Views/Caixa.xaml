@@ -26,9 +26,10 @@
         <GroupBox Margin="5" BorderBrush="SteelBlue" Header="Saída" Grid.Column="1">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Name="Vendas" Text="Sem Vendas"/>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                         <TextBlock Text="Valor para Fechar Caixa: "/>
-                        <xctk:DoubleUpDown x:Name="CampoFechamento" MinWidth="70" Minimum="0"/>
+                        <xctk:DoubleUpDown x:Name="CampoFechamento" MinWidth="70" Minimum="0" IsEnabled="False"/>
                     </StackPanel>
                     <Button x:Name="BotaoFechar" Click="BotaoFechar_Click" Content="Fechar Caixa" Template="{DynamicResource ButtonTemplate}" Margin="3"/>
                     <TextBlock x:Name="Sangria" Text="Fazer uma sangria de caixa" TextAlignment="Center" TextDecorations="Underline" MouseLeftButtonUp="Sangria_MouseLeftButtonUp" Cursor="Hand"/>

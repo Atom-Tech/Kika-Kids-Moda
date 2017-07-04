@@ -16,37 +16,43 @@ using System.Windows.Shapes;
 namespace KikaKidsModa.Views
 {
     /// <summary>
-    /// Interaction logic for Vendedor.xaml
+    /// Interaction logic for Cliente.xaml
     /// </summary>
-    public partial class Vendedor : Page
+    public partial class Cliente : Page
     {
         int op = 0;
         bool cpfValido = false;
-        Model.Vendedor Vend = new Model.Vendedor();
+        Model.Cliente Cli = new Model.Cliente();
 
-        public Vendedor()
+        public Cliente()
         {
             InitializeComponent();
             DataContext = this;
         }
 
+        public async Task UpdateList()
+        {
+            Lista.ItemsSource = null;
+            Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
+        }
+
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+            await UpdateList();
             AtivarCampos(false);
         }
 
         private void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Lista.SelectedItem is Model.Vendedor && Lista.SelectedItem != null)
+            if (Lista.SelectedItem is Model.Cliente && Lista.SelectedItem != null)
             {
-                Vend = (Model.Vendedor)Lista.SelectedItem;
-                CampoNome.Text = Vend.Nome;
-                CampoEnd.Text = Vend.Endereco;
-                CampoCPF.Text = Vend.CPF;
-                CampoEmail.Text = Vend.Email;
-                CampoRG.Text = Vend.RG;
-                CampoTel.Text = Vend.Telefone;
+                Cli = (Model.Cliente)Lista.SelectedItem;
+                CampoNome.Text = Cli.Nome;
+                CampoEnd.Text = Cli.Endereco;
+                CampoCPF.Text = Cli.CPF;
+                CampoEmail.Text = Cli.Email;
+                CampoRG.Text = Cli.RG;
+                CampoTel.Text = Cli.Telefone;
             }
             AtivarCampos(false);
         }
@@ -56,11 +62,11 @@ namespace KikaKidsModa.Views
             Lista.ItemsSource = null;
             if (CampoBusca.Text == "")
             {
-                Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+                Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
             }
             else
             {
-                Lista.ItemsSource = (await Synchro.tbVendedor.ReadAsync()).Where(c => c.Nome.Contains(CampoBusca.Text));
+                Lista.ItemsSource = (await Synchro.tbCliente.ReadAsync()).Where(c => c.Nome.Contains(CampoBusca.Text));
             }
         }
 
@@ -68,13 +74,13 @@ namespace KikaKidsModa.Views
         {
             cpfValido = Validar.CPF(CampoCPF.Text);
             CampoCPF.BorderBrush = cpfValido ? Brushes.Green : Brushes.Red;
-            if (cpfValido) Vend.CPF = CampoCPF.Text;
+            if (cpfValido) Cli.CPF = CampoCPF.Text;
         }
 
         private void Novo_Click(object sender, RoutedEventArgs e)
         {
             op = 1;
-            Vend = new Model.Vendedor();
+            Cli = new Model.Cliente();
             CampoNome.Text = "";
             CampoEnd.Text = "";
             CampoCPF.Text = "";
@@ -96,7 +102,7 @@ namespace KikaKidsModa.Views
 
         private void Alterar_Click(object sender, RoutedEventArgs e)
         {
-            if (Vend.Id != null)
+            if (Cli.Id != null)
             {
                 op = 2;
                 AtivarCampos(true);
@@ -105,40 +111,40 @@ namespace KikaKidsModa.Views
 
         private async void Deletar_Click(object sender, RoutedEventArgs e)
         {
-            if (Vend.Id != null)
+            if (Cli.Id != null)
             {
                 var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
                 if (message == MessageBoxResult.Yes)
                 {
-                    await Control.VendedorControl.Delete(Vend);
-                    Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+                    await Control.ClienteControl.Delete(Cli);
+                    Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
                 }
             }
         }
 
         private void CampoRG_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Vend.RG = CampoRG.Text;
+            Cli.RG = CampoRG.Text;
         }
 
         private void CampoNome_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Vend.Nome = CampoNome.Text;
+            Cli.Nome = CampoNome.Text;
         }
 
         private void CampoEnd_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Vend.Endereco = CampoEnd.Text;
+            Cli.Endereco = CampoEnd.Text;
         }
 
         private void CampoTel_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Vend.Telefone = CampoTel.Text;
+            Cli.Telefone = CampoTel.Text;
         }
 
         private void CampoEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Vend.Email = CampoEmail.Text;
+            Cli.Email = CampoEmail.Text;
         }
 
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)
@@ -148,11 +154,11 @@ namespace KikaKidsModa.Views
                 if (await SemUnique())
                 {
                     if (await InsertUpdate())
-                        Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+                        Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
                 }
                 else
                 {
-                    MessageBox.Show("Não pode haver vendedores com o mesmo email e/ou CPF");
+                    MessageBox.Show("Não pode haver Clientes com o mesmo email e/ou CPF");
                 }
             }
             else
@@ -164,8 +170,8 @@ namespace KikaKidsModa.Views
 
         public async Task<bool> SemUnique()
         {
-            return (await Synchro.tbVendedor.ReadAsync()).Where(v => v.Email == Vend.Email && v.Id != Vend?.Id).Count() == 0
-                && (await Synchro.tbVendedor.ReadAsync()).Where(v => v.CPF == Vend.CPF && v.Id != Vend?.Id).Count() == 0;
+            return (await Synchro.tbCliente.ReadAsync()).Where(v => v.Email == Cli.Email && v.Id != Cli?.Id).Count() == 0
+                && (await Synchro.tbCliente.ReadAsync()).Where(v => v.CPF == Cli.CPF && v.Id != Cli?.Id).Count() == 0;
         }
 
 
@@ -174,10 +180,10 @@ namespace KikaKidsModa.Views
             switch (op)
             {
                 case 1: //Novo
-                    await Control.VendedorControl.Insert(Vend);
+                    await Control.ClienteControl.Insert(Cli);
                     return true;
                 case 2: //Alterar
-                    await Control.VendedorControl.Update(Vend);
+                    await Control.ClienteControl.Update(Cli);
                     return true;
             }
             return false;
@@ -185,5 +191,6 @@ namespace KikaKidsModa.Views
 
         public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoTel.IsMaskCompleted && CampoEnd.Text != ""
                 && cpfValido && CampoRG.IsMaskCompleted;
+        
     }
 }

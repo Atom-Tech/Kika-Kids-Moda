@@ -191,9 +191,9 @@ namespace KikaKidsModa.Views
 
         public async Task<bool> SemUnique()
         {
-            return (await Synchro.tbUsuario.ReadAsync()).Where(p => p.Login == User.Login).Count() == 0
-                && (await Synchro.tbUsuario.ReadAsync()).Where(p => p.Email == User.Email).Count() == 0
-                && (await Synchro.tbUsuario.ReadAsync()).Where(p => p.CPF == User.CPF).Count() == 0;
+            return (await Synchro.tbUsuario.ReadAsync()).Where(p => p.Login == User.Login && p.Id != User?.Id).Count() == 0
+                && (await Synchro.tbUsuario.ReadAsync()).Where(p => p.Email == User.Email && p.Id != User?.Id).Count() == 0
+                && (await Synchro.tbUsuario.ReadAsync()).Where(p => p.CPF == User.CPF && p.Id != User?.Id).Count() == 0;
         }
 
 
