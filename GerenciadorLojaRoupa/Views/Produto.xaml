@@ -69,7 +69,7 @@
             <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" ValueChanged="CampoQuantidade_ValueChanged" Minimum="0"/>
             <TextBlock Text="Valor:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
             <xctk:DoubleUpDown Name="CampoValor" ValueChanged="CampoValor_ValueChanged" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Height="23" Minimum="0"/>
-            <Button Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
+            <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
     </Grid>
 </Page>

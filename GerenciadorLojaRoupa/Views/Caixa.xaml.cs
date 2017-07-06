@@ -142,11 +142,18 @@ namespace KikaKidsModa.Views
             if (ValorSangria.Value.HasValue)
             {
                 caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
-                caixa.ValorSangria = ValorSangria.Value.Value;
-                await Control.CaixaControl.Update(caixa);
-                var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
-                var valor = vendasHoje.Sum(v => v.Valor);
-                CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
+                if (ValorSangria.Value < caixa.ValorAbertura)
+                {
+                    caixa.ValorSangria = ValorSangria.Value.Value;
+                    await Control.CaixaControl.Update(caixa);
+                    var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
+                    var valor = vendasHoje.Sum(v => v.Valor);
+                    CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
+                }
+                else
+                {
+                    MessageBox.Show("Sangria não pode ser maior que o valor de abertura");
+                }
             }
         }
     }

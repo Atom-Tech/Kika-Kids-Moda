@@ -103,7 +103,7 @@ namespace KikaKidsModa
         
         private void Home_Selected(object sender, RoutedEventArgs e)
         {
-            if (x) Root.Navigate(new Home());
+            Root.Navigate(new Home());
         }
         
         private void AbrirFecharCaixa_Selected(object sender, RoutedEventArgs e)
@@ -144,6 +144,11 @@ namespace KikaKidsModa
         private void Clientes_Selected(object sender, RoutedEventArgs e)
         {
             Root.Navigate(new Cliente());
+        }
+
+        private void Config_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Config());
         }
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

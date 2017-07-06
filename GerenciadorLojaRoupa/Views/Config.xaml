@@ -1,4 +1,4 @@
-﻿<Page x:Class="KikaKidsModa.Views.Usuario"
+﻿<Page x:Class="KikaKidsModa.Views.Config"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,32 +9,11 @@
       d:DesignHeight="700" d:DesignWidth="600" Background="White" Loaded="Page_Loaded"
       Title="Usuario">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DockPanel Grid.RowSpan="2">
-            <TextBlock Text="Lista de Usuários" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-            <DockPanel DockPanel.Dock="Bottom">
-                <TextBox x:Name="CampoBusca" Style="{StaticResource placeHolder}" Tag="Buscar usuário por login" Padding="3,0,3,0" Width="150" DockPanel.Dock="Bottom" TextChanged="CampoBusca_TextChanged"/>
-                <ListView x:Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Login}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </DockPanel>
-        </DockPanel>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,3,0,3">
-            <Button x:Name="Novo" Template="{DynamicResource ButtonTemplateLeft}" Content="Novo" Padding="3" Click="Novo_Click"/>
-            <Button x:Name="Alterar" Template="{DynamicResource ButtonTemplateCenter}" Content="Alterar" Padding="5" Click="Alterar_Click"/>
-            <Button x:Name="Deletar" Template="{DynamicResource ButtonTemplateRight}" Content="Deletar" Padding="5" Click="Deletar_Click"/>
-        </StackPanel>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Configurações de Usuário" Margin="3" FontSize="16"/>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -54,12 +33,7 @@
             <TextBlock Text="Nome:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2"/>
             <TextBox Name="CampoNome" Grid.Column="3" VerticalAlignment="Center" Height="23" TextChanged="CampoNome_TextChanged" MaxLength="50"/>
             <TextBlock Text="Endereço:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1"/>
-            <TextBox Name="CampoEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="23" TextChanged="CampoEnd_TextChanged" MaxLength="40"/>
-            <TextBlock Text="Nível de Acesso:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2"/>
-            <ComboBox Name="CampoNA" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Height="23" SelectionChanged="CampoNA_SelectionChanged">
-                <ComboBoxItem Content="Administrador"/>
-                <ComboBoxItem Content="Funcionário"/>
-            </ComboBox>
+            <TextBox Name="CampoEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="23" TextChanged="CampoEnd_TextChanged" MaxLength="40" Grid.ColumnSpan="3"/>
             <TextBlock Text="Email:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2"/>
             <TextBox Name="CampoEmail" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoEmail_TextChanged" MaxLength="30"/>
             <TextBlock Text="CPF:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>

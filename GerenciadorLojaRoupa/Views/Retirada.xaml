@@ -43,7 +43,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -75,14 +75,12 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </GroupBox>
-            <TextBlock Text="Valor de Entrada: " Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <xctk:DoubleUpDown Name="CampoValor" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoValor_ValueChanged"/>
-            <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged"/>
+            <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="80" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged"/>
             <TextBlock Text="Data de Retirada: " Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,0,0"/>
             <TextBox Name="CampoData" IsEnabled="False" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Margin="0,30,0,0"/>
             <CheckBox Name="Retornado" Content="Produto Retornado?" Grid.Column="2" Grid.Row="3" VerticalAlignment="Bottom" Margin="0,0,0,30" Checked="Retornado_Checked" Unchecked="Retornado_Unchecked"/>
-            <Button Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
+            <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
     </Grid>
 </Page>

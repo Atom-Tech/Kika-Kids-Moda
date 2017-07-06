@@ -39,5 +39,7 @@ namespace KikaKidsModa.Model
         public string Data { get; set; }
         [JsonProperty(PropertyName = "dsFormaPagamento")]
         public string FormaPagamento { get; set; }
+        [JsonProperty(PropertyName = "vlEntrada")]
+        public double ValorEntrada { get; set; }
     }
 }

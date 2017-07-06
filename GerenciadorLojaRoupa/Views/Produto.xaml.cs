@@ -98,6 +98,7 @@ namespace KikaKidsModa.Views
             CampoQuantidade.IsEnabled = vf;
             CampoTamanho.IsEnabled = vf;
             CampoValor.IsEnabled = vf;
+            BotaoSalvar.IsEnabled = vf;
         }
 
         private void Alterar_Click(object sender, RoutedEventArgs e)
@@ -133,7 +134,11 @@ namespace KikaKidsModa.Views
             if (VerificarCamposVazios())
             {
                 if (await InsertUpdate())
+                {
                     Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
+                    op = 0;
+                    AtivarCampos(false);
+                }
             }
             else
             {

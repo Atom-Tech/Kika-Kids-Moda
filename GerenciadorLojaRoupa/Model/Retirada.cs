@@ -45,8 +45,6 @@ namespace KikaKidsModa.Model
         public string Data { get; set; }
         [JsonProperty(PropertyName = "qtRetirada")]
         public int Quantidade { get; set; }
-        [JsonProperty(PropertyName = "vlUnit")]
-        public double ValorEntrada { get; set; }
         [JsonProperty(PropertyName = "retornado")]
         public bool Retornado { get; set; }
     }

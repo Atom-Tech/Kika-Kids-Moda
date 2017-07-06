@@ -45,7 +45,6 @@ namespace KikaKidsModa.Views
                 await Ret.Load();
                 CampoQuantidade.Maximum = Ret.Produto.Quantidade;
                 CampoQuantidade.Value = Ret.Quantidade;
-                CampoValor.Value = Ret.ValorEntrada;
                 CampoData.Text = Ret.Data;
                 Retornado.IsChecked = Ret.Retornado;
                 foreach (Model.Produto p in ListaProdutos.Items)
@@ -96,7 +95,6 @@ namespace KikaKidsModa.Views
                 Data = DateTime.Today.ToShortDateString()
             };
             CampoQuantidade.Value = 0;
-            CampoValor.Value = 0;
             AtivarCampos(true);
             ListaProdutos.SelectedIndex = -1;
             ListaVendedores.SelectedIndex = -1;
@@ -105,10 +103,10 @@ namespace KikaKidsModa.Views
         public void AtivarCampos(bool vf)
         {
             CampoQuantidade.IsEnabled = vf;
-            CampoValor.IsEnabled = vf;
             ListaProdutos.IsEnabled = vf;
             ListaVendedores.IsEnabled = vf;
             Retornado.IsEnabled = vf;
+            BotaoSalvar.IsEnabled = vf;
         }
 
         private void Alterar_Click(object sender, RoutedEventArgs e)
@@ -125,7 +123,11 @@ namespace KikaKidsModa.Views
             if (VerificarCamposVazios())
             {
                 if (await InsertUpdate())
+                {
                     Lista.ItemsSource = await Synchro.tbRetirada.ReadAsync();
+                    op = 0;
+                    AtivarCampos(false);
+                }
             }
             else
             {
@@ -148,7 +150,7 @@ namespace KikaKidsModa.Views
             return false;
         }
 
-        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0
+        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0
             && Ret.CodigoProduto != null && Ret.CPFVendedor != null;
 
         private void CampoQuantidade_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -156,12 +158,6 @@ namespace KikaKidsModa.Views
             if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
             Ret.Quantidade = CampoQuantidade.Value.Value;
         }
-
-        private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            Ret.ValorEntrada = CampoValor.Value.Value;
-        }
-        
 
         private void Retornado_Checked(object sender, RoutedEventArgs e)
         {

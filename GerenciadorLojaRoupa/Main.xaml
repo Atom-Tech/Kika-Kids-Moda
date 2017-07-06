@@ -54,6 +54,7 @@
                               SelectionIndicatorColor="White"
                               MenuItemForeground="LightBlue">
                 <hb:HamburgerMenuItem Text="Página Principal" Foreground="White" Selected="Home_Selected" IsSelected="False" Icon="Imagens/Home-32.png"/>
+                <hb:HamburgerMenuItem Text="Configurações" Foreground="White" Selected="Config_Selected" Icon="Imagens/Settings-32.png"/>
                 <hb:HamburgerMenuItem Text="Abrir/Fechar Caixa" Foreground="White" Selected="AbrirFecharCaixa_Selected" Icon="Imagens/Door-32.png"/>
                 <hb:HamburgerMenuItem x:Name="HMuser" Text="Usuários" Foreground="White" Selected="Usuarios_Selected" Icon="Imagens/User Menu-32.png"/>
                 <hb:HamburgerMenuItem Text="Gerenciar Clientes" Foreground="White" Selected="Clientes_Selected" Icon="Imagens/Queue-32.png"/>

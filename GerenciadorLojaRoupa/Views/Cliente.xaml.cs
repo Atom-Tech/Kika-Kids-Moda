@@ -98,6 +98,7 @@ namespace KikaKidsModa.Views
             CampoCPF.IsEnabled = vf;
             CampoTel.IsEnabled = vf;
             CampoEmail.IsEnabled = vf;
+            BotaoSalvar.IsEnabled = vf;
         }
 
         private void Alterar_Click(object sender, RoutedEventArgs e)
@@ -154,7 +155,11 @@ namespace KikaKidsModa.Views
                 if (await SemUnique())
                 {
                     if (await InsertUpdate())
+                    {
                         Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
+                        op = 0;
+                        AtivarCampos(false);
+                    }
                 }
                 else
                 {

@@ -61,7 +61,7 @@
             <TextBox Name="CampoEmail" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoEmail_TextChanged" MaxLength="20"/>
             <TextBlock Text="Telefone:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
             <xctk:MaskedTextBox Name="CampoTel" Mask="(00)00000-0000" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoTel_TextChanged"/>
-            <Button Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
+            <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
     </Grid>
 </Page>

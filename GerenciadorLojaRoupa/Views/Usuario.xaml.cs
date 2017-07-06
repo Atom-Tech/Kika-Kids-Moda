@@ -33,7 +33,7 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+            Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync()).Where(u => u.Id != Main.usuarioLogado.Id);
             AtivarCampos(false);
         }
 
@@ -57,11 +57,12 @@ namespace KikaKidsModa.Views
             Lista.ItemsSource = null;
             if (CampoBusca.Text == "")
             {
-                Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+                Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync()).Where(u => u.Id != Main.usuarioLogado.Id);
             }
             else
             {
-                Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync()).Where(c => c.Login.Contains(CampoBusca.Text));
+                Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync())
+                    .Where(c => c.Login.Contains(CampoBusca.Text) && c.Id != Main.usuarioLogado.Id);
             }
         }
 
@@ -93,6 +94,7 @@ namespace KikaKidsModa.Views
             CampoCPF.IsEnabled = vf;
             CampoNA.IsEnabled = vf;
             CampoEmail.IsEnabled = vf;
+            BotaoSalvar.IsEnabled = vf;
             CheckSenha.IsChecked = false;
             AtivarGrupo(false);
             if (!vf)
@@ -175,7 +177,11 @@ namespace KikaKidsModa.Views
                 if (await SemUnique())
                 {
                     if (await InsertUpdate())
+                    {
                         Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+                        op = 0;
+                        AtivarCampos(false);
+                    }
                 }
                 else
                 {

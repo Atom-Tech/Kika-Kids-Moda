@@ -31,8 +31,7 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ListaProdutos.ItemsSource = (await Synchro.tbRetirada.ReadAsync())
-                .Where(r => !r.Retornado);
+            ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
             ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
             Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
             AtivarCampos(false);
@@ -48,13 +47,12 @@ namespace KikaKidsModa.Views
                 CampoQuantidade.Maximum = Vend.Produto.Quantidade;
                 CampoQuantidade.Value = Vend.QuantidadeProduto;
                 CampoData.Text = Vend.Data;
-                for (int i = 0; i < ListaProdutos.Items.Count; i++)
+                CampoValor.Value = Vend.ValorEntrada;
+                foreach (Model.Produto p in ListaProdutos.Items)
                 {
-                    var r = (Model.Retirada)ListaProdutos.Items[i];
-                    var p = await r.GetProduto();
                     if (p.Codigo == Vend.Produto.Codigo)
                     {
-                        ListaProdutos.SelectedIndex = i;
+                        ListaProdutos.SelectedItem = p;
                         break;
                     }
                 }
@@ -70,13 +68,13 @@ namespace KikaKidsModa.Views
             AtivarCampos(false);
         }
 
-        private async void ListaProdutos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListaProdutos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ListaProdutos.SelectedItem is Model.Retirada && ListaProdutos.SelectedItem != null)
+            if (ListaProdutos.SelectedItem is Model.Produto && ListaProdutos.SelectedItem != null)
             {
-                Vend.Produto = await ((Model.Retirada)ListaProdutos.SelectedItem).GetProduto();
+                Vend.Produto = (Model.Produto)ListaProdutos.SelectedItem;
                 Vend.CodigoProduto = Vend.Produto.Codigo;
-                CampoQuantidade.Maximum = ((Model.Retirada)ListaProdutos.SelectedItem).Quantidade;
+                CampoQuantidade.Maximum = ((Model.Produto)ListaProdutos.SelectedItem).Quantidade;
                 if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
                 CalcularValorTotal();
             }
@@ -100,6 +98,7 @@ namespace KikaKidsModa.Views
             };
             CampoQuantidade.Value = 0;
             CampoMetodo.SelectedIndex = 0;
+            CampoValor.Value = 0;
             AtivarCampos(true);
             ListaProdutos.SelectedIndex = -1;
             ListaClientes.SelectedIndex = -1;
@@ -111,6 +110,8 @@ namespace KikaKidsModa.Views
             ListaProdutos.IsEnabled = vf;
             ListaClientes.IsEnabled = vf;
             CampoMetodo.IsEnabled = vf;
+            BotaoSalvar.IsEnabled = vf;
+            CampoValor.IsEnabled = vf;
         }
         
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)
@@ -118,7 +119,12 @@ namespace KikaKidsModa.Views
             if (VerificarCamposVazios())
             {
                 if (await InsertUpdate())
+                {
                     Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+                    op = 0;
+                    await ReduzirQuantidade();
+                    AtivarCampos(false);
+                }
             }
             else
             {
@@ -133,7 +139,6 @@ namespace KikaKidsModa.Views
             {
                 case 1: //Novo
                     await Control.VendaControl.Insert(Vend);
-                    await ReduzirQuantidade();
                     return true;
             }
             return false;
@@ -144,13 +149,17 @@ namespace KikaKidsModa.Views
             var produto = Vend.Produto;
             produto.Quantidade -= Vend.QuantidadeProduto;
             await Synchro.tbProduto.UpdateAsync(produto);
-            var retirado = (Model.Retirada)ListaProdutos.SelectedItem;
-            retirado.Quantidade -= Vend.QuantidadeProduto;
-            await Synchro.tbRetirada.UpdateAsync(retirado);
         }
 
-        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0
+        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0
             && Vend.CodigoProduto != null && Vend.CPFCliente != null;
+
+
+        private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Vend.ValorEntrada = CampoValor.Value.Value;
+            CalcularValorTotal();
+        }
 
         private void CampoQuantidade_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
