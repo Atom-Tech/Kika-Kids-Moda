@@ -44,14 +44,17 @@ namespace KikaKidsModa
 
         public static async Task SyncAsync()
         {
-            await App.banco.SyncContext.PushAsync();
-            await tbCaixa.PullAsync("tbCaixa", tbCaixa.CreateQuery());
-            await tbUsuario.PullAsync("tbUsuario", tbUsuario.CreateQuery());
-            await tbProduto.PullAsync("tbProduto", tbProduto.CreateQuery());
-            await tbVendedor.PullAsync("tbVendedor", tbVendedor.CreateQuery());
-            await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
-            await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
-            await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
+            if (Main.HasInternet)
+            {
+                await App.banco.SyncContext.PushAsync();
+                await tbCaixa.PullAsync("tbCaixa", tbCaixa.CreateQuery());
+                await tbUsuario.PullAsync("tbUsuario", tbUsuario.CreateQuery());
+                await tbProduto.PullAsync("tbProduto", tbProduto.CreateQuery());
+                await tbVendedor.PullAsync("tbVendedor", tbVendedor.CreateQuery());
+                await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
+                await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
+                await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
+            }
         }
     }
 }

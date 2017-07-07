@@ -20,6 +20,7 @@ namespace KikaKidsModa.Views
     /// </summary>
     public partial class Venda : Page
     {
+        public static string ClienteCadastrado = null;
         int op = 0;
         Model.Venda Vend = new Model.Venda();
 
@@ -94,7 +95,8 @@ namespace KikaKidsModa.Views
             op = 1;
             Vend = new Model.Venda()
             {
-                Data = DateTime.Today.ToShortDateString()
+                Data = DateTime.Today.ToShortDateString(),
+                FormaPagamento = "Crédito"
             };
             CampoQuantidade.Value = 0;
             CampoMetodo.SelectedIndex = 0;
@@ -118,18 +120,43 @@ namespace KikaKidsModa.Views
         {
             if (VerificarCamposVazios())
             {
-                if (await InsertUpdate())
+                if (Vend.CPFCliente == null)
                 {
-                    Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-                    op = 0;
-                    await ReduzirQuantidade();
-                    AtivarCampos(false);
+                    var mensagem = MessageBox.Show("Não há um cliente selecionado, deseja cadastrar um?","Aviso",MessageBoxButton.YesNo);
+                    if (mensagem == MessageBoxResult.Yes)
+                    {
+                        var janela = new JanelaCliente();
+                        janela.ShowDialog();
+                        if (ClienteCadastrado != null)
+                        {
+                            Vend.CPFCliente = ClienteCadastrado;
+                            if (await InsertUpdate())
+                            {
+                                Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+                                ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
+                                op = 0;
+                                await ReduzirQuantidade();
+                                AtivarCampos(false);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (await InsertUpdate())
+                    {
+                        Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+                        op = 0;
+                        await ReduzirQuantidade();
+                        AtivarCampos(false);
+                    }
                 }
             }
             else
             {
                 MessageBox.Show("Há campos vazios", "Aviso");
             }
+            ClienteCadastrado = null;
         }
 
 
@@ -152,7 +179,7 @@ namespace KikaKidsModa.Views
         }
 
         public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0
-            && Vend.CodigoProduto != null && Vend.CPFCliente != null;
+            && Vend.CodigoProduto != null;
 
 
         private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

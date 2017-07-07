@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Net.NetworkInformation;
+using System.Net;
 
 namespace KikaKidsModa
 {
@@ -28,6 +30,7 @@ namespace KikaKidsModa
         public static HamburgerMenu.HamburgerMenuItem HMUser;
         public static double entrada = 0.00;
         public static Model.Usuario usuarioLogado;
+        public static bool HasInternet;
 
         public Main()
         {
@@ -35,21 +38,66 @@ namespace KikaKidsModa
             MainFrame = Root;
             HM = Hamburger;
             HMUser = HMuser;
+            HasInternet = CheckInternet();
+            if (HasInternet)
+            {
+                MensagemSync.Text = "Conectado";
+                MensagemSync.Foreground = Brushes.LightGreen;
+            }
+            else
+            {
+                MensagemSync.Text = "Desconectado";
+                MensagemSync.Foreground = Brushes.LightPink;
+            }
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+        }
+
+        public static bool CheckInternet()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    using (var stream = client.OpenRead("http://www.google.com"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        {
+            HasInternet = e.IsAvailable;
+            if (HasInternet)
+            {
+                await Synchro.SyncAsync();
+
+                Dispatcher.Invoke(() =>
+                {
+                    MensagemSync.Text = "Conectado";
+                    MensagemSync.Foreground = Brushes.LightGreen;
+                });
+            }
+            else
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    MensagemSync.Text = "Desconectado";
+                    MensagemSync.Foreground = Brushes.LightPink;
+                });
+            }
         }
 
         private async void Janela_ContentRendered(object sender, EventArgs e)
         {
-            try
-            {
-                await Synchro.InitLocalStoreAsync();
-                Loading.Visibility = Visibility.Collapsed;
-                Root.Navigate(new Login());
-            }
-            catch (System.Net.Http.HttpRequestException)
-            {
-                MessageBox.Show("Não há conexão com internet");
-                Environment.Exit(0);
-            }
+            await Synchro.InitLocalStoreAsync();
+            Loading.Visibility = Visibility.Collapsed;
+            Root.Navigate(new Login());
         }
 
         double width, height;
@@ -100,12 +148,12 @@ namespace KikaKidsModa
             _isMouseDown = true;
             this.DragMove();
         }
-        
+
         private void Home_Selected(object sender, RoutedEventArgs e)
         {
             Root.Navigate(new Home());
         }
-        
+
         private void AbrirFecharCaixa_Selected(object sender, RoutedEventArgs e)
         {
             Root.Navigate(new Caixa(false));

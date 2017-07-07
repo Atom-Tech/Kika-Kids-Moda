@@ -13,19 +13,19 @@ namespace KikaKidsModa.Control
         public static async Task Insert(Model.Usuario u)
         {
             await Synchro.tbUsuario.InsertAsync(u);
-            await App.banco.SyncContext.PushAsync();
+            if (Main.HasInternet) await App.banco.SyncContext.PushAsync();
         }
         
         public static async Task Delete(Model.Usuario u)
         {
             await Synchro.tbUsuario.DeleteAsync(u);
-            await App.banco.SyncContext.PushAsync();
+            if (Main.HasInternet) await App.banco.SyncContext.PushAsync();
         }
 
         public static async Task Update(Model.Usuario u)
         {
             await Synchro.tbUsuario.UpdateAsync(u);
-            await App.banco.SyncContext.PushAsync();
+            if (Main.HasInternet) await App.banco.SyncContext.PushAsync();
         }
     }
 }
