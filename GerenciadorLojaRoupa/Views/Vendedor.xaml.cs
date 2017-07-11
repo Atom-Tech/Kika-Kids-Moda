@@ -23,6 +23,7 @@ namespace KikaKidsModa.Views
         int op = 0;
         bool cpfValido = false;
         Model.Vendedor Vend = new Model.Vendedor();
+        string cpfAntigo = "";
 
         public Vendedor()
         {
@@ -47,6 +48,7 @@ namespace KikaKidsModa.Views
                 CampoEmail.Text = Vend.Email;
                 CampoRG.Text = Vend.RG;
                 CampoTel.Text = Vend.Telefone;
+                cpfAntigo = Vend.CPF;
             }
             AtivarCampos(false);
         }
@@ -104,17 +106,29 @@ namespace KikaKidsModa.Views
             }
         }
 
+        public async Task<bool> HasForeign()
+        {
+            return (await Synchro.tbRetirada.ReadAsync()).Where(v => v.CPFVendedor == Vend.CPF).Count() > 0;
+        }
+
+
         private async void Deletar_Click(object sender, RoutedEventArgs e)
         {
-            if (Vend.Id != null)
+            if (!await HasForeign())
             {
-                var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
-                if (message == MessageBoxResult.Yes)
+                if (Vend.Id != null)
                 {
-                    await Control.VendedorControl.Delete(Vend);
-                    Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+                    var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
+                    if (message == MessageBoxResult.Yes)
+                    {
+                        await Control.VendedorControl.Delete(Vend);
+                        Lista.ItemsSource = await Synchro.tbVendedor.ReadAsync();
+                        MessageBox.Show("Vendedor deletado com sucesso!");
+                    }
                 }
             }
+            else
+                MessageBox.Show("Esse vendedor já retirou produtos");
         }
 
         private void CampoRG_TextChanged(object sender, TextChangedEventArgs e)
@@ -180,12 +194,28 @@ namespace KikaKidsModa.Views
             {
                 case 1: //Novo
                     await Control.VendedorControl.Insert(Vend);
+                    MessageBox.Show("Vendedor inserido com sucesso!");
                     return true;
                 case 2: //Alterar
                     await Control.VendedorControl.Update(Vend);
+                    await UpdateCPF();
+                    MessageBox.Show("Vendedor alterado com sucesso!");                
                     return true;
             }
             return false;
+        }
+
+        public async Task UpdateCPF()
+        {
+            var retiradas = await Synchro.tbRetirada.ReadAsync();
+            foreach (var retirada in retiradas)
+            {
+                if (retirada.CPFVendedor == cpfAntigo)
+                {
+                    retirada.CPFVendedor = Vend.CPF;
+                    await Control.RetiradaControl.Update(retirada);
+                }
+            }
         }
 
         public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoTel.IsMaskCompleted && CampoEnd.Text != ""

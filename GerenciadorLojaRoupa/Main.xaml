@@ -63,6 +63,7 @@
                 <hb:HamburgerMenuItem Text="Gerenciar Vendedores" Foreground="White" Selected="Vendedores_Selected" Icon="Imagens/Delivery-32.png"/>
                 <hb:HamburgerMenuItem Text="Retirada de Produtos" Foreground="White" Selected="Retirada_Selected" Icon="Imagens/Shop-32.png"/>
                 <hb:HamburgerMenuItem Text="Vender Produto" Foreground="White" Selected="Vender_Selected" Icon="Imagens/Price-32.png"/>
+                <hb:HamburgerMenuItem Name="HMRelatorio"  Text="Verificar Relatórios" Foreground="White" Selected="Relatorios_Selected" Icon="Imagens/Chart-32.png"/>
                 <hb:HamburgerMenuItem Text="Trocar Usuário" Foreground="White" Selected="TrocarUsuario_Selected" Icon="Imagens/User-32.png"/>
             </hb:HamburgerMenu>
         </Grid>

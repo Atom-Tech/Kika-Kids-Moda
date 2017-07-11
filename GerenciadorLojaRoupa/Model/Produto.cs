@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,5 +30,8 @@ namespace KikaKidsModa.Model
         {
             return (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == codigo).First().Nome;
         }
+        [Version]
+        public byte[] Version { get; set; }
+
     }
 }

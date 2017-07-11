@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace KikaKidsModa
 {
@@ -15,5 +16,14 @@ namespace KikaKidsModa
     public partial class App : Application
     {
         public static MobileServiceClient banco = new MobileServiceClient("https://lojaroupaapi.azurewebsites.net");
+
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            /*if (e.Exception is MobileServiceConflictException)
+            {
+                MessageBox.Show("Um conflito aconteceu");
+            }*/
+            e.Handled = true;
+        }
     }
 }

@@ -42,29 +42,33 @@ namespace KikaKidsModa.Views
         {
             if (Lista.SelectedItem is Model.Venda && Lista.SelectedItem != null)
             {
+                ListaProdutos.SelectedIndex = -1;
+                ListaClientes.SelectedIndex = -1;
                 Vend = (Model.Venda)Lista.SelectedItem;
                 await Vend.Load();
                 CampoMetodo.SelectedIndex = Vend.FormaPagamento == "Crédito" ? 0 : 1;
-                CampoQuantidade.Maximum = Vend.Produto.Quantidade;
+                CampoQuantidade.Maximum = Vend.Produto?.Quantidade;
                 CampoQuantidade.Value = Vend.QuantidadeProduto;
                 CampoData.Text = Vend.Data;
                 CampoValor.Value = Vend.ValorEntrada;
-                foreach (Model.Produto p in ListaProdutos.Items)
-                {
-                    if (p.Codigo == Vend.Produto.Codigo)
+                if (Vend.Produto != null)
+                    foreach (Model.Produto p in ListaProdutos.Items)
                     {
-                        ListaProdutos.SelectedItem = p;
-                        break;
+                        if (p.Codigo == Vend.Produto.Codigo)
+                        {
+                            ListaProdutos.SelectedItem = p;
+                            break;
+                        }
                     }
-                }
-                foreach (Model.Cliente c in ListaClientes.Items)
-                {
-                    if (c.CPF == Vend.Cliente.CPF)
+                if (Vend.Cliente != null)
+                    foreach (Model.Cliente c in ListaClientes.Items)
                     {
-                        ListaClientes.SelectedItem = c;
-                        break;
+                        if (c.CPF == Vend.Cliente.CPF)
+                        {
+                            ListaClientes.SelectedItem = c;
+                            break;
+                        }
                     }
-                }
             }
             AtivarCampos(false);
         }
@@ -115,14 +119,14 @@ namespace KikaKidsModa.Views
             BotaoSalvar.IsEnabled = vf;
             CampoValor.IsEnabled = vf;
         }
-        
+
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)
         {
             if (VerificarCamposVazios())
             {
                 if (Vend.CPFCliente == null)
                 {
-                    var mensagem = MessageBox.Show("Não há um cliente selecionado, deseja cadastrar um?","Aviso",MessageBoxButton.YesNo);
+                    var mensagem = MessageBox.Show("Não há um cliente selecionado, deseja cadastrar um?", "Aviso", MessageBoxButton.YesNo);
                     if (mensagem == MessageBoxResult.Yes)
                     {
                         var janela = new JanelaCliente();
@@ -166,6 +170,7 @@ namespace KikaKidsModa.Views
             {
                 case 1: //Novo
                     await Control.VendaControl.Insert(Vend);
+                    MessageBox.Show("Produto vendido com sucesso!");
                     return true;
             }
             return false;

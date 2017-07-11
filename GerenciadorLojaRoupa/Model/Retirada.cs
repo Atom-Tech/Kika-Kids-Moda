@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,11 +16,11 @@ namespace KikaKidsModa.Model
         {
             if (CodigoProduto != null)
             {
-                Produto = (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == CodigoProduto).First();
+                Produto = (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == CodigoProduto).FirstOrDefault();
             }
             if (CPFVendedor != null)
             {
-                Vendedor = (await Synchro.tbVendedor.ReadAsync()).Where(v => v.CPF == CPFVendedor).First();
+                Vendedor = (await Synchro.tbVendedor.ReadAsync()).Where(v => v.CPF == CPFVendedor).FirstOrDefault();
             }
         }
 
@@ -47,5 +48,12 @@ namespace KikaKidsModa.Model
         public int Quantidade { get; set; }
         [JsonProperty(PropertyName = "retornado")]
         public bool Retornado { get; set; }
+        [Version]
+        public byte[] Version { get; set; }
+        public static Dictionary<string, string> Colunas { get; } = new Dictionary<string, string>()
+        {
+            { "CodigoProduto", "Código do Produto" },
+            { "CPFVendedor", "CPF do Vendedor" }
+        };
     }
 }

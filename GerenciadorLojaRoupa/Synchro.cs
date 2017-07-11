@@ -37,7 +37,7 @@ namespace KikaKidsModa
                 store.DefineTable<Retirada>();
                 store.DefineTable<Cliente>();
                 store.DefineTable<Venda>();
-                await App.banco.SyncContext.InitializeAsync(store);
+                await App.banco.SyncContext.InitializeAsync(store, new CustomHandler());
             }
             await SyncAsync();
         }

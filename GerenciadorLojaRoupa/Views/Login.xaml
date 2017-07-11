@@ -5,16 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KikaKidsModa.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="700" d:DesignWidth="700"
       Title="Login" Background="White" Loaded="Page_Loaded">
     <Border BorderBrush="SteelBlue" BorderThickness="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Digite o seu login e sua senha para acessar as funções do programa" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Image Source="/KikaKidsModa;component/Imagens/Logo.jpg" Width="300" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="Digite o seu login e sua senha para acessar as funções do programa" Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0" HorizontalAlignment="Center"/>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>

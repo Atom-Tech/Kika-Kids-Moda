@@ -23,6 +23,7 @@ namespace KikaKidsModa.Views
         int op = 0;
         bool cpfValido = false;
         Model.Cliente Cli = new Model.Cliente();
+        string cpfAntigo = "";
 
         public Cliente()
         {
@@ -53,6 +54,7 @@ namespace KikaKidsModa.Views
                 CampoEmail.Text = Cli.Email;
                 CampoRG.Text = Cli.RG;
                 CampoTel.Text = Cli.Telefone;
+                cpfAntigo = Cli.CPF;
             }
             AtivarCampos(false);
         }
@@ -110,17 +112,28 @@ namespace KikaKidsModa.Views
             }
         }
 
+        public async Task<bool> HasForeign()
+        {
+            return (await Synchro.tbVenda.ReadAsync()).Where(c => c.CPFCliente == Cli.CPF).Count() > 0;
+        }
+
         private async void Deletar_Click(object sender, RoutedEventArgs e)
         {
-            if (Cli.Id != null)
+            if (!await HasForeign())
             {
-                var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
-                if (message == MessageBoxResult.Yes)
+                if (Cli.Id != null)
                 {
-                    await Control.ClienteControl.Delete(Cli);
-                    Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
+                    var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
+                    if (message == MessageBoxResult.Yes)
+                    {
+                        await Control.ClienteControl.Delete(Cli);
+                        Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
+                        MessageBox.Show("Cliente deletado com sucesso!");
+                    }
                 }
             }
+            else
+                MessageBox.Show("Há vendas com esse cliente");
         }
 
         private void CampoRG_TextChanged(object sender, TextChangedEventArgs e)
@@ -186,16 +199,32 @@ namespace KikaKidsModa.Views
             {
                 case 1: //Novo
                     await Control.ClienteControl.Insert(Cli);
+                    MessageBox.Show("Cliente inserido com sucesso!");
                     return true;
                 case 2: //Alterar
                     await Control.ClienteControl.Update(Cli);
+                    await UpdateCPF();
+                    MessageBox.Show("Cliente alterado com sucesso!");
                     return true;
             }
             return false;
         }
 
+        public async Task UpdateCPF()
+        {
+            var vendas = await Synchro.tbVenda.ReadAsync();
+            foreach (var venda in vendas)
+            {
+                if (venda.CPFCliente == cpfAntigo)
+                {
+                    venda.CPFCliente = Cli.CPF;
+                    await Control.VendaControl.Update(venda);
+                }
+            }
+        }
+
         public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoTel.IsMaskCompleted && CampoEnd.Text != ""
                 && cpfValido && CampoRG.IsMaskCompleted;
-        
+
     }
 }

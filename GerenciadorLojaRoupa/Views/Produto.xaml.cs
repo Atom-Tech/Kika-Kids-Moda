@@ -22,6 +22,7 @@ namespace KikaKidsModa.Views
     {
         int op = 0;
         Model.Produto Prod = new Model.Produto();
+        string codigoAntigo = "";
 
         public Produto()
         {
@@ -44,6 +45,7 @@ namespace KikaKidsModa.Views
                 CampoNome.Text = Prod.Nome;
                 CampoDescricao.Text = Prod.Descricao;
                 CampoValor.Value = Prod.Valor;
+                codigoAntigo = Prod.Codigo;
                 switch (Prod.Tamanho)
                 {
                     case "P":
@@ -110,17 +112,30 @@ namespace KikaKidsModa.Views
             }
         }
 
+        public async Task<bool> HasForeign()
+        {
+            return (await Synchro.tbRetirada.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0 ||
+                   (await Synchro.tbVenda.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0;
+        }
+
+
         private async void Deletar_Click(object sender, RoutedEventArgs e)
         {
-            if (Prod.Id != null)
+            if (!await HasForeign())
             {
-                var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
-                if (message == MessageBoxResult.Yes)
+                if (Prod.Id != null)
                 {
-                    await Control.ProdutoControl.Delete(Prod);
-                    Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
+                    var message = MessageBox.Show("Tem certeza que deseja deletar? Não será possivel recuperar depois", "Aviso", MessageBoxButton.YesNo);
+                    if (message == MessageBoxResult.Yes)
+                    {
+                        await Control.ProdutoControl.Delete(Prod);
+                        Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
+                        MessageBox.Show("Produto deletado com sucesso!");
+                    }
                 }
             }
+            else
+                MessageBox.Show("Esse produto já foi retirado ou vendido antes");
         }
 
         private void CampoNome_TextChanged(object sender, TextChangedEventArgs e)
@@ -133,11 +148,18 @@ namespace KikaKidsModa.Views
         {
             if (VerificarCamposVazios())
             {
-                if (await InsertUpdate())
+                if (await SemUnique())
                 {
-                    Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
-                    op = 0;
-                    AtivarCampos(false);
+                    if (await InsertUpdate())
+                    {
+                        Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
+                        op = 0;
+                        AtivarCampos(false);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Não pode haver produtos com o mesmo código");
                 }
             }
             else
@@ -151,25 +173,38 @@ namespace KikaKidsModa.Views
             switch (op)
             {
                 case 1: //Novo
-                    if (await SemUnique())
-                        await Control.ProdutoControl.Insert(Prod);
-                    else
-                    {
-                        MessageBox.Show("Não pode haver produtos com o mesmo código");
-                        return false;
-                    }
+                    await Control.ProdutoControl.Insert(Prod);
+                    MessageBox.Show("Produto inserido com sucesso!");
                     return true;
                 case 2: //Alterar
-                    if (await SemUnique())
-                        await Control.ProdutoControl.Update(Prod);
-                    else
-                    {
-                        MessageBox.Show("Não pode haver produtos com o mesmo código");
-                        return false;
-                    }
+                    await Control.ProdutoControl.Update(Prod);
+                    await UpdateCodigo();
+                    MessageBox.Show("Produto alterado com sucesso!");
                     return true;
             }
             return false;
+        }
+
+        public async Task UpdateCodigo()
+        {
+            var vendas = await Synchro.tbVenda.ReadAsync();
+            var retiradas = await Synchro.tbRetirada.ReadAsync();
+            foreach (var retirada in retiradas)
+            {
+                if (retirada.CodigoProduto == codigoAntigo)
+                {
+                    retirada.CodigoProduto = Prod.Codigo;
+                    await Control.RetiradaControl.Update(retirada);
+                }
+            }
+            foreach (var venda in vendas)
+            {
+                if (venda.CodigoProduto == codigoAntigo)
+                {
+                    venda.CodigoProduto = Prod.Codigo;
+                    await Control.VendaControl.Update(venda);
+                }
+            }
         }
 
         public async Task<bool> SemUnique()

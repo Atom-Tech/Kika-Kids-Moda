@@ -40,12 +40,18 @@ namespace KikaKidsModa.Views
                     if (u.NivelAcesso == "Administrador")
                     {
                         Main.HMUser.Visibility = Visibility.Visible;
+                        Main.HMRel.Visibility = Visibility.Visible;
                         Main.MainFrame.Navigate(new Caixa());
                     }   
                     else
                     {
                         Main.HMUser.Visibility = Visibility.Collapsed;
+                        Main.HMRel.Visibility = Visibility.Collapsed;
                         Main.MainFrame.Navigate(new Home());
+                        for (int i = 0; i < Main.HM.Content.Count; i++)
+                        {
+                            Main.HM.Content[i].IsSelected = i == 0;
+                        }
                         Main.HM.Visibility = Visibility.Visible;
                     }
                 }

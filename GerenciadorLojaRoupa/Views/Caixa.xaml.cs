@@ -149,6 +149,8 @@ namespace KikaKidsModa.Views
                     var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
                     var valor = vendasHoje.Sum(v => v.Valor);
                     CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
+                    GroupSangria.Visibility = Visibility.Collapsed;
+                    MessageBox.Show("Sangria realizada com sucesso!");
                 }
                 else
                 {

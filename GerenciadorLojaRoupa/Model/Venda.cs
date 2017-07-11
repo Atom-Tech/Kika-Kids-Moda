@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace KikaKidsModa.Model
         {
             if (CodigoProduto != null)
             {
-                Produto = (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == CodigoProduto).First();
+                Produto = (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == CodigoProduto).FirstOrDefault();
             }
             if (CPFCliente != null)
             {
-                Cliente = (await Synchro.tbCliente.ReadAsync()).Where(v => v.CPF == CPFCliente).First();
+                Cliente = (await Synchro.tbCliente.ReadAsync()).Where(v => v.CPF == CPFCliente).FirstOrDefault();
             }
         }
 
@@ -41,5 +42,15 @@ namespace KikaKidsModa.Model
         public string FormaPagamento { get; set; }
         [JsonProperty(PropertyName = "vlEntrada")]
         public double ValorEntrada { get; set; }
+        [Version]
+        public byte[] Version { get; set; }
+        public static Dictionary<string, string> Colunas { get; } = new Dictionary<string, string>()
+        {
+            { "CPFCliente", "CPF do Cliente" },
+            { "CodigoProduto", "Código do Produto" },
+            { "QuantidadeProduto", "Quantidade do Produto" },
+            { "FormaPagamento", "Forma de Pagamento" },
+            { "ValorEntrada", "Valor de Entrada" }
+        };
     }
 }

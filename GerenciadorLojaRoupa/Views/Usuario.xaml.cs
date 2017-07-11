@@ -122,6 +122,7 @@ namespace KikaKidsModa.Views
                 {
                     await Control.UsuarioControl.Delete(User);
                     Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+                    MessageBox.Show("Usuário deletado com sucesso!");
                 }
             }
         }
@@ -178,7 +179,7 @@ namespace KikaKidsModa.Views
                 {
                     if (await InsertUpdate())
                     {
-                        Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+                        Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync()).Where(u => u.Id != Main.usuarioLogado.Id);
                         op = 0;
                         AtivarCampos(false);
                     }
@@ -233,6 +234,7 @@ namespace KikaKidsModa.Views
                                     {
                                         User.Senha = c.EncryptToString(CampoSenhaNova.Password);
                                         await Control.UsuarioControl.Update(User);
+                                        MessageBox.Show("Usuário alterado com sucesso!");
                                         return true;
                                     }
                                     else
@@ -254,6 +256,7 @@ namespace KikaKidsModa.Views
                         else
                         {
                             await Control.UsuarioControl.Update(User);
+                            MessageBox.Show("Usuário alterado com sucesso!");
                             return true;
                         }
                     }

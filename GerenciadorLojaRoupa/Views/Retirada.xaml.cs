@@ -41,28 +41,32 @@ namespace KikaKidsModa.Views
         {
             if (Lista.SelectedItem is Model.Retirada && Lista.SelectedItem != null)
             {
+                ListaProdutos.SelectedIndex = -1;
+                ListaVendedores.SelectedIndex = -1;
                 Ret = (Model.Retirada)Lista.SelectedItem;
                 await Ret.Load();
-                CampoQuantidade.Maximum = Ret.Produto.Quantidade;
+                CampoQuantidade.Maximum = Ret.Produto?.Quantidade;
                 CampoQuantidade.Value = Ret.Quantidade;
                 CampoData.Text = Ret.Data;
                 Retornado.IsChecked = Ret.Retornado;
-                foreach (Model.Produto p in ListaProdutos.Items)
-                {
-                    if (p.Codigo == Ret.Produto.Codigo)
+                if (Ret.Produto != null)
+                    foreach (Model.Produto p in ListaProdutos.Items)
                     {
-                        ListaProdutos.SelectedItem = p;
-                        break;
+                        if (p.Codigo == Ret.Produto.Codigo)
+                        {
+                            ListaProdutos.SelectedItem = p;
+                            break;
+                        }
                     }
-                }
-                foreach (Model.Vendedor v in ListaVendedores.Items)
-                {
-                    if (v.CPF == Ret.Vendedor.CPF)
+                if (Ret.Vendedor != null)
+                    foreach (Model.Vendedor v in ListaVendedores.Items)
                     {
-                        ListaVendedores.SelectedItem = v;
-                        break;
+                        if (v.CPF == Ret.Vendedor.CPF)
+                        {
+                            ListaVendedores.SelectedItem = v;
+                            break;
+                        }
                     }
-                }
             }
             AtivarCampos(false);
         }
@@ -142,9 +146,11 @@ namespace KikaKidsModa.Views
             {
                 case 1: //Novo
                     await Control.RetiradaControl.Insert(Ret);
+                    MessageBox.Show("Produto retirado com sucesso!");
                     return true;
                 case 2: //Alterar
                     await Control.RetiradaControl.Update(Ret);
+                    MessageBox.Show("Retirada alterada com sucesso!");
                     return true;
             }
             return false;

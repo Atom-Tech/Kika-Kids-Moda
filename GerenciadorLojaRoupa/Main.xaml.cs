@@ -28,6 +28,7 @@ namespace KikaKidsModa
         public static Frame MainFrame;
         public static HamburgerMenu.HamburgerMenu HM;
         public static HamburgerMenu.HamburgerMenuItem HMUser;
+        public static HamburgerMenu.HamburgerMenuItem HMRel;
         public static double entrada = 0.00;
         public static Model.Usuario usuarioLogado;
         public static bool HasInternet;
@@ -38,6 +39,7 @@ namespace KikaKidsModa
             MainFrame = Root;
             HM = Hamburger;
             HMUser = HMuser;
+            HMRel = HMRelatorio;
             HasInternet = CheckInternet();
             if (HasInternet)
             {
@@ -76,7 +78,6 @@ namespace KikaKidsModa
             if (HasInternet)
             {
                 await Synchro.SyncAsync();
-
                 Dispatcher.Invoke(() =>
                 {
                     MensagemSync.Text = "Conectado";
@@ -197,6 +198,11 @@ namespace KikaKidsModa
         private void Config_Selected(object sender, RoutedEventArgs e)
         {
             Root.Navigate(new Config());
+        }
+
+        private void Relatorios_Selected(object sender, RoutedEventArgs e)
+        {
+            Root.Navigate(new Relatorios());
         }
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

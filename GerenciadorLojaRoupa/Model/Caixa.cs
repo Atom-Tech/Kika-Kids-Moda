@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,16 @@ namespace KikaKidsModa.Model
         public double ValorFechamento { get; set; }
         [JsonProperty(PropertyName = "vlSangria")]
         public double ValorSangria { get; set; }
+        [Version]
+        public byte[] Version { get; set; }
+        public static Dictionary<string, string> Colunas { get; } = new Dictionary<string, string>()
+        {
+            { "DataCaixa", "Data" },
+            { "HoraAbertura", "Horário de Abertura" },
+            { "HoraFechamento", "Horário de Fechamento" },
+            { "ValorAbertura", "Valor de Abertura" },
+            { "ValorFechamento", "Valor de Fechamento" },
+            { "ValorSangria", "Valor de Sangria" }
+        };
     }
 }
