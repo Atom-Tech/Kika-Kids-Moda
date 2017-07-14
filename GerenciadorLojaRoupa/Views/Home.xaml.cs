@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,8 +30,17 @@ namespace KikaKidsModa.Views
         {
             var caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
             Welcome.Text = $"Bem Vindo, {Main.usuarioLogado.Login}!";
-            Caixa.Text = $"O dinheiro no caixa atualmente é R${caixa.ValorAbertura-caixa.ValorSangria}";
+            Caixa.Text = $"O dinheiro no caixa atualmente é R${caixa.ValorAbertura - caixa.ValorSangria}";
             ComboProduto.ItemsSource = await Synchro.tbProduto.ReadAsync();
+            await CarregarNotificacoes();
+        }
+
+        public async Task CarregarNotificacoes()
+        {
+            ListaPrest.ItemsSource = (await Synchro.tbVenda.ReadAsync())
+                .Where(c => (c.DataPrestacao.ToDay() >= DateTime.Today.AddDays(-3) &&
+                            c.DataPrestacao.ToDay() <= DateTime.Today.AddDays(3)) ||
+                            c.DataPrestacao.ToDay() == DateTime.Today);
         }
 
         private async void BotaoEstoque_Click(object sender, RoutedEventArgs e)
@@ -53,6 +63,26 @@ namespace KikaKidsModa.Views
             {
                 MessageBox.Show("A quantidade deve ser maior que 0");
             }
+        }
+    }
+
+    public class BackConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            /*
+            var venda = (Model.Venda)value;
+            if (venda.DataPrestacao.ToDay() < DateTime.Today) return Brushes.Pink;
+            if (venda.DataPrestacao.ToDay() == DateTime.Today) return Brushes.LightYellow;
+            return Brushes.LightGreen;*/
+            if (value.ToString().ToDay() < DateTime.Today) return "Antes";
+            if (value.ToString().ToDay() == DateTime.Today) return "Agora";
+            return "Depois";
+        }
+        
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

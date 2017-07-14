@@ -32,6 +32,7 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            CampoPrestacao.Minimum = DateTime.Today;
             ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
             ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
             Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
@@ -51,6 +52,7 @@ namespace KikaKidsModa.Views
                 CampoQuantidade.Value = Vend.QuantidadeProduto;
                 CampoData.Text = Vend.Data;
                 CampoValor.Value = Vend.ValorEntrada;
+                CampoPrestacao.Value = DateTime.Parse(Vend.DataPrestacao);
                 if (Vend.Produto != null)
                     foreach (Model.Produto p in ListaProdutos.Items)
                     {
@@ -212,6 +214,11 @@ namespace KikaKidsModa.Views
         private void CampoMetodo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Vend.FormaPagamento = CampoMetodo.SelectedIndex == 0 ? "Crédito" : "Débito";
+        }
+
+        private void CampoPrestacao_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Vend.DataPrestacao = CampoPrestacao.Value.Value.ToShortDateString();
         }
     }
 }

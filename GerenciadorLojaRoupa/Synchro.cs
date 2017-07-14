@@ -56,5 +56,7 @@ namespace KikaKidsModa
                 await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
             }
         }
+
+        public static DateTime ToDay(this string day) => DateTime.Parse(day);
     }
 }

@@ -23,6 +23,7 @@ namespace KikaKidsModa
             {
                 MessageBox.Show("Um conflito aconteceu");
             }*/
+            MessageBox.Show($"Erro {e.Exception.InnerException}: {e.Exception.Message}");
             e.Handled = true;
         }
     }

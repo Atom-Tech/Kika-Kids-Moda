@@ -39,5 +39,45 @@
                 <xctk:IntegerUpDown Name="QuantidadeEstoque" Minimum="0" MinWidth="100" Margin="3" Value="0"/>
             </StackPanel>
         </GroupBox>
+        <GroupBox Header="Notificações" Grid.ColumnSpan="2" Grid.Row="3">
+            <ListView Name="ListaPrest" ItemsSource="{Binding}">
+                <ListView.Resources>
+                    <local:BackConverter x:Key="BackConverter"/>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border
+                         BorderBrush="Transparent"
+                         BorderThickness="0"
+                         Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Antes">
+                                <Setter Property="Background" Value="Pink"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Agora">
+                                <Setter Property="Background" Value="LightYellow"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
+                                <Setter Property="Background" Value="LightGreen"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding Data}"/>
+                        <GridViewColumn Header="CPF do Cliente" DisplayMemberBinding="{Binding CPFCliente}"/>
+                        <GridViewColumn Header="Código do Produto" DisplayMemberBinding="{Binding CodigoProduto}"/>
+                        <GridViewColumn Header="Data da Prestação" DisplayMemberBinding="{Binding DataPrestacao}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
     </Grid>
 </Page>

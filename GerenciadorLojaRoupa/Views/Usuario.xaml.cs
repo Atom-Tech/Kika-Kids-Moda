@@ -82,6 +82,7 @@ namespace KikaKidsModa.Views
             CampoEnd.Text = "";
             CampoCPF.Text = "";
             CampoNA.SelectedIndex = 1;
+            User.NivelAcesso = "Funcionário";
             CampoEmail.Text = "";
             AtivarCampos(true);
         }

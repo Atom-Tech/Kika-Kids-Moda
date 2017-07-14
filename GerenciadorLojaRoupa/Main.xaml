@@ -10,6 +10,13 @@
         Title="MainWindow" MinHeight="700" MinWidth="700" WindowStyle="None" Background="SteelBlue"
         ResizeMode="CanResizeWithGrip" ContentRendered="Janela_ContentRendered">
     <Window.Resources>
+        <Storyboard x:Key="UpdateBlink" BeginTime="00:00:00" 
+                                    RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.Opacity)" Storyboard.TargetName="botaoAtualizar">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
         <Style x:Name="topButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
@@ -20,34 +27,47 @@
             <Label Content="Gerenciador Kika Kids Moda" Margin="10,0,0,0" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
             <TextBlock Name="MensagemSync" Text="Conectado" FontSize="14" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                <Button x:Name="botaoMinimizar" Click="minimizar_Click" Width="29">
+                <Button x:Name="botaoAtualizar" Click="botaoAtualizar_Click" Width="29" ToolTip="Atualizar">
+                    <Button.Background>
+                        <SolidColorBrush Opacity="0" Color="#FF2E6899"/>
+                    </Button.Background>
                     <Button.Content>
-                        <Image Source="Imagens/Minimize Window-32.png"/>
+                        <Image Source="Imagens/Update-32.png"/>
                     </Button.Content>
                 </Button>
-                <Button x:Name="botaoMaximizar" Click="maximizar_Click" Width="29">
-                    <Button.Content>
-                        <Grid>
-                            <Image x:Name="maximize" Source="Imagens/Maximize Window-32.png" />
-                            <Image x:Name="restore" Source="Imagens/Restore Window-32.png" Visibility="Collapsed"/>
-                        </Grid>
-                    </Button.Content>
+                <Button x:Name="botaoMinimizar" Click="minimizar_Click" Width="29" ToolTip="Minimizar">
+                    <Image Source="Imagens/Minimize Window-32.png"/>
                 </Button>
-                <Button x:Name="botaoFechar" Click="fechar_Click" Width="29" Template="{DynamicResource BotaoFecharTemplate}">
-                    <Button.Content>
-                        <Image Source="Imagens/Cancel-32.png" />
-                    </Button.Content>
+                <Button x:Name="botaoMaximizar" Click="maximizar_Click" Width="29" ToolTip="Maximizar/Restaurar">
+                    <Grid>
+                        <Image x:Name="maximize" Source="Imagens/Maximize Window-32.png" />
+                        <Image x:Name="restore" Source="Imagens/Restore Window-32.png" Visibility="Collapsed"/>
+                    </Grid>
+                </Button>
+                <Button x:Name="botaoFechar" Click="fechar_Click" Width="29" Template="{DynamicResource BotaoFecharTemplate}" ToolTip="Fechar">
+                    <Image Source="Imagens/Cancel-32.png" />
                 </Button>
             </StackPanel>
         </DockPanel>
         <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <StackPanel x:Name="Loading" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <views:CircularProgressBar/>
                 <TextBlock Text="Carregando..." HorizontalAlignment="Center"/>
             </StackPanel>
-            <Frame x:Name="Root" 
+                <Frame x:Name="Root" 
                    Margin="50,0,0,0"
-                   NavigationUIVisibility="Hidden"/>
+                   NavigationUIVisibility="Hidden" DockPanel.Dock="Top"/>
+                <StatusBar Grid.Row="1" Height="23" BorderBrush="Gray" BorderThickness="1">
+                    <TextBlock x:Name="versao" Text="Versão 1.0.1" />
+                    <Separator/>
+                    <TextBlock Text="Baixando... " Visibility="{Binding Visibility, ElementName=barraProgresso}"/>
+                    <TextBlock x:Name="porcentagem" Text="0%" Visibility="{Binding Visibility, ElementName=barraProgresso}"/>
+                    <ProgressBar x:Name="barraProgresso" Height="15" Width="100" Visibility="Hidden"/>
+                </StatusBar>
             <hb:HamburgerMenu x:Name="Hamburger"
                               Visibility="Collapsed"
                               Background="SteelBlue"

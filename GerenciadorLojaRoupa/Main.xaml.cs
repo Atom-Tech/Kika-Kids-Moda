@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net.NetworkInformation;
 using System.Net;
+using System.Windows.Media.Animation;
 
 namespace KikaKidsModa
 {
@@ -24,6 +25,7 @@ namespace KikaKidsModa
     /// </summary>
     public partial class Main : Window
     {
+        private bool max = false;
         public static bool x = false;
         public static Frame MainFrame;
         public static HamburgerMenu.HamburgerMenu HM;
@@ -32,10 +34,12 @@ namespace KikaKidsModa
         public static double entrada = 0.00;
         public static Model.Usuario usuarioLogado;
         public static bool HasInternet;
+        Atualizar a;
 
         public Main()
         {
             InitializeComponent();
+            a = new Atualizar(barraProgresso, porcentagem, versao);
             MainFrame = Root;
             HM = Hamburger;
             HMUser = HMuser;
@@ -52,6 +56,11 @@ namespace KikaKidsModa
                 MensagemSync.Foreground = Brushes.LightPink;
             }
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            if (a.PossuiAtualizacao)
+            {
+                Storyboard s = (Storyboard)this.Resources["UpdateBlink"];
+                s.Begin();
+            }
         }
 
         public static bool CheckInternet()
@@ -115,13 +124,17 @@ namespace KikaKidsModa
 
         private void maximizar_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowState != WindowState.Maximized)
+            if (!max)
             {
                 maximize.Visibility = Visibility.Collapsed;
                 restore.Visibility = Visibility.Visible;
                 height = Height;
                 width = Width;
-                WindowState = WindowState.Maximized;
+                max = true;
+                Top = 0;
+                Left = 0;
+                Height = SystemParameters.WorkArea.Height;
+                Width = SystemParameters.WorkArea.Width;
             }
             else
             {
@@ -129,7 +142,7 @@ namespace KikaKidsModa
                 restore.Visibility = Visibility.Collapsed;
                 Height = height;
                 Width = width;
-                WindowState = WindowState.Normal;
+                max = false;
             }
         }
 
@@ -204,6 +217,35 @@ namespace KikaKidsModa
         {
             Root.Navigate(new Relatorios());
         }
+
+        private void botaoAtualizar_Click(object sender, RoutedEventArgs e)
+        {
+            if (a != null)
+            {
+                try
+                {
+                    if (barraProgresso.Visibility == Visibility.Hidden)
+                    {
+                        if (a.PossuiAtualizacao)
+                        {
+                            if (a.ArquivoExiste())
+                                a.Instalar();
+                            else
+                                a.FazerDownload();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Não há atualizações por enquanto");
+                        }
+                    }
+                }
+                catch (Exception ex) when (ex.Message.Contains("O nome remoto não pôde ser resolvido"))
+                {
+                    MessageBox.Show("Você não tem internet");
+                }
+            }
+        }
+
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
