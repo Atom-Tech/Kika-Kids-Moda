@@ -19,8 +19,10 @@ namespace KikaKidsModa.Model
         public string Nome { get; set; }
         [JsonProperty(PropertyName = "dsProduto")]
         public string Descricao { get; set; }
-        [JsonProperty(PropertyName = "tmProduto")]
-        public string Tamanho { get; set; }
+        [JsonProperty(PropertyName = "sgTamanho")]
+        public string SiglaTamanho { get; set; }
+        [JsonProperty(PropertyName = "tmProdutoN")]
+        public int? NumeroTamanho { get; set; }
         [JsonProperty(PropertyName = "qtProduto")]
         public int Quantidade { get; set; }
         [JsonProperty(PropertyName = "vlProduto")]

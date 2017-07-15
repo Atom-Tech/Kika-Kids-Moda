@@ -37,7 +37,8 @@ namespace KikaKidsModa.Views
 
         public async Task CarregarNotificacoes()
         {
-            ListaPrest.ItemsSource = (await Synchro.tbVenda.ReadAsync())
+            var tbVenda = (await Synchro.tbVenda.ReadAsync());
+            ListaPrest.ItemsSource = tbVenda
                 .Where(c => (c.DataPrestacao.ToDay() >= DateTime.Today.AddDays(-3) &&
                             c.DataPrestacao.ToDay() <= DateTime.Today.AddDays(3)) ||
                             c.DataPrestacao.ToDay() == DateTime.Today);
@@ -70,16 +71,11 @@ namespace KikaKidsModa.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            /*
-            var venda = (Model.Venda)value;
-            if (venda.DataPrestacao.ToDay() < DateTime.Today) return Brushes.Pink;
-            if (venda.DataPrestacao.ToDay() == DateTime.Today) return Brushes.LightYellow;
-            return Brushes.LightGreen;*/
             if (value.ToString().ToDay() < DateTime.Today) return "Antes";
             if (value.ToString().ToDay() == DateTime.Today) return "Agora";
             return "Depois";
         }
-        
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

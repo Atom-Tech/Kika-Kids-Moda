@@ -21,17 +21,54 @@
             <TextBlock Text="Lista de Vendas" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
             <DockPanel DockPanel.Dock="Bottom">
                 <ListView x:Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Path=Data}"/>
-                                <TextBlock Text=" - "/>
-                                <TextBlock Text="{Binding Path=CPFCliente}"/>
-                                <TextBlock Text=" comprou "/>
-                                <TextBlock Text="{Binding Path=CodigoProduto}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                    <ListView.Resources>
+                        <local:BackConverter x:Key="BackConverter"/>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border
+                         BorderBrush="Black"
+                         BorderThickness="1"
+                         Background="{TemplateBinding Background}">
+                                            <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Antes">
+                                    <Setter Property="Background" Value="Pink"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Agora">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Vendas">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Path=Data}" Foreground="Black"/>
+                                            <TextBlock Text=" - " Foreground="Black"/>
+                                            <TextBlock Text="{Binding Path=CPFCliente}" Foreground="Black"/>
+                                            <TextBlock Text=" comprou " Foreground="Black"/>
+                                            <TextBlock Text="{Binding Path=CodigoProduto}" Foreground="Black"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
                 </ListView>
             </DockPanel>
         </DockPanel>
@@ -81,7 +118,7 @@
             <TextBlock Text="Valor de Entrada: " Grid.Row="2" VerticalAlignment="Center" Margin="0,0,0,60" HorizontalAlignment="Left"/>
             <xctk:DoubleUpDown Name="CampoValor" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,60" Minimum="0" ValueChanged="CampoValor_ValueChanged"/>
             <TextBlock Text="Data da Prestação:" Grid.Row="2" VerticalAlignment="Center" Margin="0,60,0,0" HorizontalAlignment="Left"/>
-            <xctk:DateTimePicker Name="CampoPrestacao" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,60,0,0" ValueChanged="CampoPrestacao_ValueChanged"/>
+            <xctk:DateTimePicker Name="CampoPrestacao" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,60,0,0" ValueChanged="CampoPrestacao_ValueChanged" Format="ShortDate"/>
             <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged"/>
             <TextBlock Text="Data da Venda: " Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,0,0"/>

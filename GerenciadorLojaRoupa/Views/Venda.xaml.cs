@@ -32,7 +32,6 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            CampoPrestacao.Minimum = DateTime.Today;
             ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
             ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
             Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
@@ -52,6 +51,7 @@ namespace KikaKidsModa.Views
                 CampoQuantidade.Value = Vend.QuantidadeProduto;
                 CampoData.Text = Vend.Data;
                 CampoValor.Value = Vend.ValorEntrada;
+                CampoPrestacao.Minimum = new DateTime(2017, 1, 1);
                 CampoPrestacao.Value = DateTime.Parse(Vend.DataPrestacao);
                 if (Vend.Produto != null)
                     foreach (Model.Produto p in ListaProdutos.Items)
@@ -107,6 +107,8 @@ namespace KikaKidsModa.Views
             CampoQuantidade.Value = 0;
             CampoMetodo.SelectedIndex = 0;
             CampoValor.Value = 0;
+            CampoPrestacao.Value = DateTime.Today;
+            CampoPrestacao.Minimum = DateTime.Today;
             AtivarCampos(true);
             ListaProdutos.SelectedIndex = -1;
             ListaClientes.SelectedIndex = -1;
@@ -120,6 +122,7 @@ namespace KikaKidsModa.Views
             CampoMetodo.IsEnabled = vf;
             BotaoSalvar.IsEnabled = vf;
             CampoValor.IsEnabled = vf;
+            CampoPrestacao.IsEnabled = vf;
         }
 
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)

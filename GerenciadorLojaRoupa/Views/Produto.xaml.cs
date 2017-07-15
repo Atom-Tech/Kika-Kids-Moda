@@ -23,6 +23,7 @@ namespace KikaKidsModa.Views
         int op = 0;
         Model.Produto Prod = new Model.Produto();
         string codigoAntigo = "";
+        bool tamanhoNumero = false;
 
         public Produto()
         {
@@ -46,7 +47,7 @@ namespace KikaKidsModa.Views
                 CampoDescricao.Text = Prod.Descricao;
                 CampoValor.Value = Prod.Valor;
                 codigoAntigo = Prod.Codigo;
-                switch (Prod.Tamanho)
+                switch (Prod.SiglaTamanho)
                 {
                     case "P":
                         CampoTamanho.SelectedIndex = 0;
@@ -60,6 +61,22 @@ namespace KikaKidsModa.Views
                     case "GG":
                         CampoTamanho.SelectedIndex = 3;
                         break;
+                    case "Único":
+                        CampoTamanho.SelectedIndex = 4;
+                        break;
+                    case null:
+                        break;
+                }
+                TamanhoNumero.Value = Prod.NumeroTamanho.HasValue ? Prod.NumeroTamanho.Value : 0;
+                if (Prod.NumeroTamanho.HasValue && Prod.NumeroTamanho.Value != 0)
+                {
+                    tamanhoNumero = true;
+                    RadioNumero.IsChecked = true;
+                }
+                else
+                {
+                    tamanhoNumero = false;
+                    RadioSigla.IsChecked = true;
                 }
                 CampoQuantidade.Value = Prod.Quantidade;
             }
@@ -100,6 +117,7 @@ namespace KikaKidsModa.Views
             CampoQuantidade.IsEnabled = vf;
             CampoTamanho.IsEnabled = vf;
             CampoValor.IsEnabled = vf;
+            TamanhoNumero.IsEnabled = vf;
             BotaoSalvar.IsEnabled = vf;
         }
 
@@ -212,8 +230,22 @@ namespace KikaKidsModa.Views
             return (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == Prod.Codigo && p.Id != Prod?.Id).Count() == 0;
         }
 
-        public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoCodigo.Text != "" && CampoTamanho.Text != ""
+        public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoCodigo.Text != "" && CheckTamanho()
                 && CampoValor.Value.HasValue && CampoQuantidade.Value.HasValue;
+
+        public bool CheckTamanho()
+        {
+            if (tamanhoNumero)
+            {
+                Prod.SiglaTamanho = null;
+                return TamanhoNumero.Value.Value != 0 && TamanhoNumero.Value.HasValue;
+            }
+            else
+            {
+                Prod.NumeroTamanho = null;
+                return CampoTamanho.SelectedIndex != -1;
+            }
+        }
 
         private void CampoCodigo_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -227,10 +259,11 @@ namespace KikaKidsModa.Views
 
         private void CampoTamanho_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CampoTamanho.SelectedIndex == 0) Prod.Tamanho = "P";
-            if (CampoTamanho.SelectedIndex == 1) Prod.Tamanho = "M";
-            if (CampoTamanho.SelectedIndex == 2) Prod.Tamanho = "G";
-            if (CampoTamanho.SelectedIndex == 3) Prod.Tamanho = "GG";
+            if (CampoTamanho.SelectedIndex == 0) Prod.SiglaTamanho = "P";
+            if (CampoTamanho.SelectedIndex == 1) Prod.SiglaTamanho = "M";
+            if (CampoTamanho.SelectedIndex == 2) Prod.SiglaTamanho = "G";
+            if (CampoTamanho.SelectedIndex == 3) Prod.SiglaTamanho = "GG";
+            if (CampoTamanho.SelectedIndex == 4) Prod.SiglaTamanho = "Único";
         }
 
         private void CampoQuantidade_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -254,6 +287,21 @@ namespace KikaKidsModa.Views
             {
                 Lista.ItemsSource = (await Synchro.tbProduto.ReadAsync()).Where(c => c.Codigo.Contains(CampoBuscaCodigo.Text));
             }
+        }
+
+        private void RadioSigla_Checked(object sender, RoutedEventArgs e)
+        {
+            tamanhoNumero = false;
+        }
+
+        private void RadioNumero_Checked(object sender, RoutedEventArgs e)
+        {
+            tamanhoNumero = true;
+        }
+
+        private void TamanhoNumero_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Prod.NumeroTamanho = TamanhoNumero.Value.HasValue ? TamanhoNumero.Value.Value : 0;
         }
     }
 }
