@@ -51,6 +51,7 @@ namespace KikaKidsModa.Views
                 caixa.ValorAbertura = CampoAbertura.Value.Value;
                 await Control.CaixaControl.Update(caixa);
                 Main.HM.Visibility = Visibility.Visible;
+                Main.HM.Content[0].IsSelected = true;
                 Main.MainFrame.Navigate(new Home());
             }
             else
@@ -98,6 +99,7 @@ namespace KikaKidsModa.Views
                 if (caixa.ValorAbertura != 0 && abrir)
                 {
                     Main.HM.Visibility = Visibility.Visible;
+                    Main.HM.Content[0].IsSelected = true;
                     Main.MainFrame.Navigate(new Home());
                 }
             }

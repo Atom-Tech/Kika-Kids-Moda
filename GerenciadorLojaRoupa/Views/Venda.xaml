@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:KikaKidsModa.Views"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
-      d:DesignHeight="700" d:DesignWidth="600" Background="White" Loaded="Page_Loaded"
+      d:DesignHeight="700" d:DesignWidth="600" Background="White"
       Title="Usuario">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -119,17 +119,38 @@
             <xctk:DoubleUpDown Name="CampoValor" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,60" Minimum="0" ValueChanged="CampoValor_ValueChanged"/>
             <TextBlock Text="Data da Prestação:" Grid.Row="2" VerticalAlignment="Center" Margin="0,60,0,0" HorizontalAlignment="Left"/>
             <xctk:DateTimePicker Name="CampoPrestacao" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,60,0,0" ValueChanged="CampoPrestacao_ValueChanged" Format="ShortDate"/>
-            <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged"/>
-            <TextBlock Text="Data da Venda: " Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,0,0"/>
-            <TextBox Name="CampoData" IsEnabled="False" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Margin="0,30,0,0"/>
-            <TextBlock Text="Valor Total: " Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <xctk:DoubleUpDown Name="CampoValorTotal" Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" IsEnabled="False"/>
-            <TextBlock Text="Método de Pagamento: " Grid.Column="1" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,30"/>
-            <ComboBox Name="CampoMetodo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Bottom" Margin="0,0,0,30" SelectionChanged="CampoMetodo_SelectionChanged">
-                <ComboBoxItem Content="Crédito"/>
-                <ComboBoxItem Content="Débito"/>
-            </ComboBox>
+            <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,60"/>
+            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged" Margin="0,0,0,60"/>
+            <TextBlock Text="Parcelas: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,60,0,0"/>
+            <xctk:IntegerUpDown Name="CampoParcelas" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" Minimum="1" Margin="0,60,0,0" ValueChanged="CampoParcelas_ValueChanged"/>
+            <xctk:DoubleUpDown Name="CampoParcelado" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False" Margin="70,60,0,0"/>
+            <Grid Grid.Row="3" Grid.ColumnSpan="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Data da Venda: " VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox Name="CampoData" IsEnabled="False" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBlock Text="Valor Total: " Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <xctk:DoubleUpDown Name="CampoValorTotal" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBlock Text="Desconto:" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <xctk:IntegerUpDown Maximum="100" Minimum="0" Name="CampoPorcentagem" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ValueChanged="CampoPorcentagem_ValueChanged"/>
+                <TextBlock Text="Valor Total com Desconto: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0,3,0"/>
+                <xctk:DoubleUpDown Name="CampoValorDesconto" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBlock Text="Método de Pagamento: " Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ComboBox Name="CampoMetodo" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="CampoMetodo_SelectionChanged">
+                    <ComboBoxItem Content="Crédito"/>
+                    <ComboBoxItem Content="Débito"/>
+                </ComboBox>
+            </Grid>
             <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
     </Grid>

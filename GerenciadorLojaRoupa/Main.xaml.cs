@@ -200,6 +200,7 @@ namespace KikaKidsModa
 
         private void Vender_Selected(object sender, RoutedEventArgs e)
         {
+            if (!x)
             Root.Navigate(new Venda());
         }
 
@@ -245,7 +246,7 @@ namespace KikaKidsModa
                 }
             }
         }
-
+        
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

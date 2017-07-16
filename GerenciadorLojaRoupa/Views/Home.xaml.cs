@@ -37,11 +37,8 @@ namespace KikaKidsModa.Views
 
         public async Task CarregarNotificacoes()
         {
-            var tbVenda = (await Synchro.tbVenda.ReadAsync());
-            ListaPrest.ItemsSource = tbVenda
-                .Where(c => (c.DataPrestacao.ToDay() >= DateTime.Today.AddDays(-3) &&
-                            c.DataPrestacao.ToDay() <= DateTime.Today.AddDays(3)) ||
-                            c.DataPrestacao.ToDay() == DateTime.Today);
+            ListaPrest.ItemsSource = (await Synchro.tbVenda.ReadAsync())
+                .Where(c => (c.DataPrestacao.ToDay() >= DateTime.Today.AddDays(-3)));
         }
 
         private async void BotaoEstoque_Click(object sender, RoutedEventArgs e)
@@ -63,6 +60,18 @@ namespace KikaKidsModa.Views
             else
             {
                 MessageBox.Show("A quantidade deve ser maior que 0");
+            }
+        }
+
+        private void ListaPrest_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListaPrest.SelectedIndex != -1)
+            {
+                var venda = (Model.Venda)ListaPrest.SelectedItem;
+                Main.x = true;
+                Main.MainFrame.Navigate(new Venda(venda));
+                Main.HM.Content[8].IsSelected = true;
+                Main.x = false;
             }
         }
     }

@@ -42,6 +42,12 @@ namespace KikaKidsModa.Model
         public string FormaPagamento { get; set; }
         [JsonProperty(PropertyName = "vlEntrada")]
         public double ValorEntrada { get; set; }
+        [JsonProperty(PropertyName = "pctDesconto")]
+        public int PorcentagemDesconto { get; set; }
+        [JsonProperty(PropertyName = "qtParcelas")]
+        public int Parcelas { get; set; }
+        [JsonProperty(PropertyName = "vlTotalDesconto")]
+        public double ValorTotalDesconto { get; set; }
         [Version]
         public byte[] Version { get; set; }
         public static Dictionary<string, string> Colunas { get; } = new Dictionary<string, string>()
@@ -50,7 +56,10 @@ namespace KikaKidsModa.Model
             { "CodigoProduto", "Código do Produto" },
             { "QuantidadeProduto", "Quantidade do Produto" },
             { "FormaPagamento", "Forma de Pagamento" },
-            { "ValorEntrada", "Valor de Entrada" }
+            { "ValorEntrada", "Valor de Entrada" },
+            { "ValorTotalDesconto", "Valor Total com Desconto" },
+            { "PorcentagemDesconto", "Porcentagem de Desconto" },
+            { "DataPrestacao", "Data da Prestação" }
         };
         [JsonProperty(PropertyName = "dtPrestacao")]
         public string DataPrestacao { get; set; }

@@ -40,7 +40,7 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Notificações" Grid.ColumnSpan="2" Grid.Row="3">
-            <ListView Name="ListaPrest" ItemsSource="{Binding}">
+            <ListView Name="ListaPrest" ItemsSource="{Binding}" SelectionChanged="ListaPrest_SelectionChanged">
                 <ListView.Resources>
                     <local:BackConverter x:Key="BackConverter"/>
                     <Style TargetType="ListViewItem">

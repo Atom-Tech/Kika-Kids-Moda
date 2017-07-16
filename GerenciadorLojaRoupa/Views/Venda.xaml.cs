@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace KikaKidsModa.Views
 {
@@ -22,12 +23,21 @@ namespace KikaKidsModa.Views
     {
         public static string ClienteCadastrado = null;
         int op = 0;
-        Model.Venda Vend = new Model.Venda();
+        Model.Venda Vend;
 
         public Venda()
         {
             InitializeComponent();
             DataContext = this;
+            Loaded += Page_Loaded;
+        }
+
+        public Venda(Model.Venda venda)
+        {
+            InitializeComponent();
+            DataContext = this;
+            Vend = venda;
+            Loaded += Page1_Loaded;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -36,6 +46,23 @@ namespace KikaKidsModa.Views
             ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
             Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
             AtivarCampos(false);
+            Vend = new Model.Venda();
+        }
+
+        private async void Page1_Loaded(object sender, RoutedEventArgs e)
+        {
+            ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
+            ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
+            Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+            AtivarCampos(false);
+            foreach (Model.Venda v in Lista.Items)
+            {
+                if (v.Id == Vend.Id)
+                {
+                    Lista.SelectedItem = v;
+                    break;
+                }
+            }
         }
 
         private async void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -51,6 +78,10 @@ namespace KikaKidsModa.Views
                 CampoQuantidade.Value = Vend.QuantidadeProduto;
                 CampoData.Text = Vend.Data;
                 CampoValor.Value = Vend.ValorEntrada;
+                CampoValorDesconto.Value = Vend.Valor;
+                CampoValorTotal.Value = Vend.Valor;
+                CampoPorcentagem.Value = Vend.PorcentagemDesconto;
+                CampoParcelas.Value = Vend.Parcelas;
                 CampoPrestacao.Minimum = new DateTime(2017, 1, 1);
                 CampoPrestacao.Value = DateTime.Parse(Vend.DataPrestacao);
                 if (Vend.Produto != null)
@@ -104,9 +135,11 @@ namespace KikaKidsModa.Views
                 Data = DateTime.Today.ToShortDateString(),
                 FormaPagamento = "Crédito"
             };
+            CampoParcelas.Value = 1;
             CampoQuantidade.Value = 0;
             CampoMetodo.SelectedIndex = 0;
             CampoValor.Value = 0;
+            CampoPorcentagem.Value = 0;
             CampoPrestacao.Value = DateTime.Today;
             CampoPrestacao.Minimum = DateTime.Today;
             AtivarCampos(true);
@@ -123,6 +156,8 @@ namespace KikaKidsModa.Views
             BotaoSalvar.IsEnabled = vf;
             CampoValor.IsEnabled = vf;
             CampoPrestacao.IsEnabled = vf;
+            CampoParcelas.IsEnabled = vf;
+            CampoPorcentagem.IsEnabled = vf;
         }
 
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)
@@ -211,6 +246,8 @@ namespace KikaKidsModa.Views
             {
                 Vend.Valor = Vend.QuantidadeProduto * Vend.Produto.Valor;
                 CampoValorTotal.Value = Vend.Valor;
+                CalcularParcela();
+                CalcularPorcentagem();
             }
         }
 
@@ -222,6 +259,29 @@ namespace KikaKidsModa.Views
         private void CampoPrestacao_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             Vend.DataPrestacao = CampoPrestacao.Value.Value.ToShortDateString();
+        }
+
+        private void CampoParcelas_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Vend.Parcelas = CampoParcelas.Value.Value;
+            CalcularParcela();
+        }
+
+        public void CalcularParcela()
+        {
+            CampoParcelado.Value = Vend.Valor / Vend.Parcelas;
+        }
+
+        private void CampoPorcentagem_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Vend.PorcentagemDesconto = CampoPorcentagem.Value.Value;
+            CalcularPorcentagem();
+        }
+
+        public void CalcularPorcentagem()
+        {
+            CampoValorDesconto.Value = Vend.Valor - Vend.Valor * Vend.PorcentagemDesconto / 100;
+            Vend.ValorTotalDesconto = CampoValorDesconto.Value.Value;
         }
     }
 }

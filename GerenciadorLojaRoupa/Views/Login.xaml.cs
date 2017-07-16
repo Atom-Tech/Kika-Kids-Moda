@@ -47,11 +47,9 @@ namespace KikaKidsModa.Views
                     {
                         Main.HMUser.Visibility = Visibility.Collapsed;
                         Main.HMRel.Visibility = Visibility.Collapsed;
+                        Main.HM.Content[0].IsSelected = true;
+                        Main.HM.Content[10].IsSelected = false;
                         Main.MainFrame.Navigate(new Home());
-                        for (int i = 0; i < Main.HM.Content.Count; i++)
-                        {
-                            Main.HM.Content[i].IsSelected = i == 0;
-                        }
                         Main.HM.Visibility = Visibility.Visible;
                     }
                 }
