@@ -66,6 +66,9 @@
                             <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
                                 <Setter Property="Background" Value="LightGreen"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Pago, Converter={StaticResource BackConverter}}" Value="true">
+                                <Setter Property="Background" Value="LightGreen"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.Resources>

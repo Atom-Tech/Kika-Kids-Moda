@@ -13,5 +13,7 @@ namespace KikaKidsModa
         public string Versao { get; set; }
 
         public string Historico { get; set; }
+
+        public string Checksum { get; set; }
     }
 }

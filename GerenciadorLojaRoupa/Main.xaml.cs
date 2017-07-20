@@ -26,6 +26,7 @@ namespace KikaKidsModa
     public partial class Main : Window
     {
         private bool max = false;
+        public static Model.Caixa Caixa;
         public static bool x = false;
         public static Frame MainFrame;
         public static HamburgerMenu.HamburgerMenu HM;

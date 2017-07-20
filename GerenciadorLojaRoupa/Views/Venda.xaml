@@ -46,6 +46,9 @@
                                 <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
                                     <Setter Property="Background" Value="LightGreen"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Pago, Converter={StaticResource BackConverter}}" Value="true">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style TargetType="GridViewColumnHeader">
@@ -73,7 +76,8 @@
             </DockPanel>
         </DockPanel>
         <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,3,0,3">
-            <Button x:Name="Novo" Template="{DynamicResource ButtonTemplate}" Content="Novo" Padding="3" Click="Novo_Click"/>
+            <Button x:Name="Novo" Template="{DynamicResource ButtonTemplateLeft}" Content="Novo" Padding="3" Click="Novo_Click"/>
+            <Button x:Name="Pagar" Template="{DynamicResource ButtonTemplateRight}" Content="Pagar" Padding="3" Click="Pagar_Click"/>
         </StackPanel>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>

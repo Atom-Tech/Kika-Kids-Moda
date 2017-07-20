@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -65,8 +66,25 @@ namespace KikaKidsModa
             var arquivo = pasta.GetFiles()
                 .OrderByDescending(f => f.LastWriteTime)
                 .First();
-            Process.Start(local + arquivo.Name);
-            Application.Current.Shutdown();
+            using (FileStream stream = File.OpenRead(local + arquivo.Name))
+            {
+                using (SHA1Managed sha = new SHA1Managed())
+                {
+                    byte[] checksum = sha.ComputeHash(stream);
+                    string sendCheckSum = BitConverter.ToString(checksum)
+                        .Replace("-", string.Empty).ToLower();
+                    if (sendCheckSum == v.Checksum)
+                    {
+                        Process.Start(local + arquivo.Name);
+                        Application.Current.Shutdown();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro no download do arquivo. Por favor, tente novamente");
+                        arquivo.Delete();
+                    }
+                }
+            }
         }
 
         public bool ArquivoExiste()

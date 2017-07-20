@@ -133,7 +133,7 @@ namespace KikaKidsModa.Views
             switch (ComboRel.SelectedIndex)
             {
                 case 0:
-                    if (Model.Caixa.Colunas.ContainsKey(coluna.DisplayName))
+                    if (Model.Caixa.Colunas.ContainsKey(coluna.DisplayName) && coluna.DisplayName != "ValorAcumulado")
                         e.Column.Header = Model.Caixa.Colunas[coluna.DisplayName];
                     break;
                 case 1:

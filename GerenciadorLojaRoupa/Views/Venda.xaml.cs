@@ -84,6 +84,7 @@ namespace KikaKidsModa.Views
                 CampoParcelas.Value = Vend.Parcelas;
                 CampoPrestacao.Minimum = new DateTime(2017, 1, 1);
                 CampoPrestacao.Value = DateTime.Parse(Vend.DataPrestacao);
+                Pagar.IsEnabled = !Vend.Pago;
                 if (Vend.Produto != null)
                     foreach (Model.Produto p in ListaProdutos.Items)
                     {
@@ -166,7 +167,7 @@ namespace KikaKidsModa.Views
             {
                 if (Vend.CPFCliente == null)
                 {
-                    var mensagem = MessageBox.Show("Não há um cliente selecionado, deseja cadastrar um?", "Aviso", MessageBoxButton.YesNo);
+                    var mensagem = MessageBox.Show("Não há um cliente selecionado, deseja cadastrar um?", "Aviso", MessageBoxButton.YesNoCancel);
                     if (mensagem == MessageBoxResult.Yes)
                     {
                         var janela = new JanelaCliente();
@@ -182,6 +183,16 @@ namespace KikaKidsModa.Views
                                 await ReduzirQuantidade();
                                 AtivarCampos(false);
                             }
+                        }
+                    }
+                    if (mensagem == MessageBoxResult.No)
+                    {
+                        if (await InsertUpdate())
+                        {
+                            Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+                            op = 0;
+                            await ReduzirQuantidade();
+                            AtivarCampos(false);
                         }
                     }
                 }
@@ -230,6 +241,7 @@ namespace KikaKidsModa.Views
         private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             Vend.ValorEntrada = CampoValor.Value.Value;
+            CalcularParcela();
             CalcularValorTotal();
         }
 
@@ -269,7 +281,7 @@ namespace KikaKidsModa.Views
 
         public void CalcularParcela()
         {
-            CampoParcelado.Value = Vend.Valor / Vend.Parcelas;
+            CampoParcelado.Value = (Vend.Valor-Vend.ValorEntrada) / Vend.Parcelas;
         }
 
         private void CampoPorcentagem_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -282,6 +294,19 @@ namespace KikaKidsModa.Views
         {
             CampoValorDesconto.Value = Vend.Valor - Vend.Valor * Vend.PorcentagemDesconto / 100;
             Vend.ValorTotalDesconto = CampoValorDesconto.Value.Value;
+        }
+
+        private async void Pagar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Vend.Id != null)
+            {
+                Vend.Pago = true;
+                await Control.VendaControl.Update(Vend);
+                Main.Caixa.ValorAcumulado += (Vend.Valor - Vend.ValorEntrada) / Vend.Parcelas;
+                await Control.CaixaControl.Update(Main.Caixa);
+                Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
+                Pagar.IsEnabled = false;
+            }
         }
     }
 }

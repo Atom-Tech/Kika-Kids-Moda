@@ -59,8 +59,11 @@ namespace KikaKidsModa.Model
             { "ValorEntrada", "Valor de Entrada" },
             { "ValorTotalDesconto", "Valor Total com Desconto" },
             { "PorcentagemDesconto", "Porcentagem de Desconto" },
-            { "DataPrestacao", "Data da Prestação" }
+            { "DataPrestacao", "Data da Prestação" },
+            { "Pago", "Pago?" }
         };
+        [JsonProperty(PropertyName = "pago")]
+        public bool Pago { get; set; }
         [JsonProperty(PropertyName = "dtPrestacao")]
         public string DataPrestacao { get; set; }
     }

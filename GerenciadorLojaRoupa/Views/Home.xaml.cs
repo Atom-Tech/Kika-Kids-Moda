@@ -28,9 +28,9 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            var caixa = (await Synchro.tbCaixa.ReadAsync()).Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).First();
             Welcome.Text = $"Bem Vindo, {Main.usuarioLogado.Login}!";
-            Caixa.Text = $"O dinheiro no caixa atualmente é R${caixa.ValorAbertura - caixa.ValorSangria}";
+            if (Main.Caixa != null) Caixa.Text = $"O dinheiro no caixa atualmente é R$" +
+                $"{Main.Caixa.ValorAbertura + Main.Caixa.ValorAcumulado - Main.Caixa.ValorSangria}";
             ComboProduto.ItemsSource = await Synchro.tbProduto.ReadAsync();
             await CarregarNotificacoes();
         }
@@ -80,6 +80,8 @@ namespace KikaKidsModa.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value.ToString().ToLower() == "true") return "true";
+            if (value.ToString().ToLower() == "false") return "false";
             if (value.ToString().ToDay() < DateTime.Today) return "Antes";
             if (value.ToString().ToDay() == DateTime.Today) return "Agora";
             return "Depois";

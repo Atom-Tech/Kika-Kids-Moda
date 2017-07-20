@@ -24,6 +24,8 @@ namespace KikaKidsModa.Model
         public double ValorFechamento { get; set; }
         [JsonProperty(PropertyName = "vlSangria")]
         public double ValorSangria { get; set; }
+        [JsonProperty(PropertyName ="vlAcumulado")]
+        public double ValorAcumulado { get; set; }
         [Version]
         public byte[] Version { get; set; }
         public static Dictionary<string, string> Colunas { get; } = new Dictionary<string, string>()
