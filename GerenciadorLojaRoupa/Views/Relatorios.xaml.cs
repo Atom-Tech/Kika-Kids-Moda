@@ -157,10 +157,11 @@ namespace KikaKidsModa.Views
                 {
                     var venda = row as Model.Venda;
                     await venda.Load();
-                    if (venda.Produto != null)
-                        View1.ItemsSource = new List<Model.Produto>() { venda.Produto };
                     if (venda.Cliente != null)
                         View2.ItemsSource = new List<Model.Cliente>() { venda.Cliente };
+                    else View2.ItemsSource = null;
+                    var items = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == venda.Id).ToList();                    
+                    View1.ItemsSource = items;
                 }
                 if (row is Model.Retirada)
                 {
@@ -168,17 +169,37 @@ namespace KikaKidsModa.Views
                     await retirada.Load();
                     if (retirada.Produto != null)
                         View1.ItemsSource = new List<Model.Produto>() { retirada.Produto };
+                    else View1.ItemsSource = null;
                     if (retirada.Vendedor != null)
                         View2.ItemsSource = new List<Model.Vendedor>() { retirada.Vendedor };
+                    else View2.ItemsSource = null;
                 }
             }
         }
 
         private void View_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
-            e.Column.Header = propertyDescriptor.DisplayName;
-            if (propertyDescriptor.DisplayName == "Id" || propertyDescriptor.DisplayName == "Version")
+            PropertyDescriptor coluna = (PropertyDescriptor)e.PropertyDescriptor;
+            switch (coluna.DisplayName)
+            {
+                case "CodigoProduto":
+                    e.Column.Header = "Código do Produto";
+                    break;
+                case "QuantidadeProduto":
+                    e.Column.Header = "Quantidade do Produto";
+                    break;
+                case "ValorProduto":
+                    e.Column.Header = "Valor Total do Produto";
+                    break;
+                default:
+                    e.Column.Header = coluna.DisplayName;
+                    break;
+            }
+            List<string> blackList = new List<string>()
+            {
+                "Version", "Id", "CodigoVenda", "Venda", "Produto"
+            };
+            if (blackList.Contains(coluna.DisplayName))
             {
                 e.Cancel = true;
             }

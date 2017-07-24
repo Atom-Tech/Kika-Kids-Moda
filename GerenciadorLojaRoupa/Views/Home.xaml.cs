@@ -63,15 +63,30 @@ namespace KikaKidsModa.Views
             }
         }
 
+        private async void BotaoPagar_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListaPrest.SelectedIndex != -1)
+            {
+                var message = MessageBox.Show("Deseja marcar essa venda como paga?", "Aviso", MessageBoxButton.YesNo);
+                if (message == MessageBoxResult.Yes)
+                {
+                    var venda = (Model.Venda)ListaPrest.SelectedItem;
+                    venda.Pago = true;
+                    await Control.VendaControl.Update(venda);
+                    Main.Caixa.ValorAcumulado += (venda.Valor - venda.ValorEntrada) / venda.Parcelas;
+                    await Control.CaixaControl.Update(Main.Caixa);
+                    ListaPrest.ItemsSource = null;
+                    await CarregarNotificacoes();
+                }
+            }
+        }
+
         private void ListaPrest_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListaPrest.SelectedIndex != -1)
             {
                 var venda = (Model.Venda)ListaPrest.SelectedItem;
-                Main.x = true;
-                Main.MainFrame.Navigate(new Venda(venda));
-                Main.HM.Content[8].IsSelected = true;
-                Main.x = false;
+                BotaoPagar.IsEnabled = !venda.Pago;
             }
         }
     }

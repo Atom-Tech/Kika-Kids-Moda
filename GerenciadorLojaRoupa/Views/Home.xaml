@@ -8,6 +8,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="700"
       Title="Home" Background="White" Loaded="Page_Loaded">
+    <Page.Resources>
+        <local:BackConverter x:Key="BackConverter"/>
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -40,71 +43,88 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Notificações" Grid.ColumnSpan="2" Grid.Row="3">
-            <ListView Name="ListaPrest" ItemsSource="{Binding}" SelectionChanged="ListaPrest_SelectionChanged">
-                <ListView.Resources>
-                    <local:BackConverter x:Key="BackConverter"/>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border
-                         BorderBrush="Black"
-                         BorderThickness="1"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ListView Name="ListaPrest" SelectionChanged="ListaPrest_SelectionChanged">
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border BorderBrush="Transparent"
+                         BorderThickness="0"
                          Background="{TemplateBinding Background}">
-                                        <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Antes">
-                                <Setter Property="Background" Value="Pink"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Agora">
-                                <Setter Property="Background" Value="LightYellow"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
-                                <Setter Property="Background" Value="LightGreen"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=Pago, Converter={StaticResource BackConverter}}" Value="true">
-                                <Setter Property="Background" Value="LightGreen"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.Resources>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Data">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Data}" Foreground="Black"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="CPF do Cliente">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CPFCliente}" Foreground="Black"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Código do Produto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CodigoProduto}" Foreground="Black"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Data da Prestação">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding DataPrestacao}" Foreground="Black"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                                            <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter Property="BorderBrush" Value="Black"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Antes">
+                                    <Setter Property="Background" Value="Pink"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Agora">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Pago, Converter={StaticResource BackConverter}}" Value="true">
+                                    <Setter Property="Background" Value="LightGreen"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Data">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Data}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="CPF do Cliente">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CPFCliente}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Código do Produto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CodigoProduto}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Data da Prestação">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DataPrestacao}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Valor Total">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Valor}" Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Name="BotaoPagar" Grid.Row="1" Click="BotaoPagar_Click" Template="{DynamicResource ButtonTemplate}" Padding="3" Margin="3" VerticalAlignment="Bottom" Content="Pagar" HorizontalAlignment="Center"/>
+            </Grid>
         </GroupBox>
     </Grid>
 </Page>

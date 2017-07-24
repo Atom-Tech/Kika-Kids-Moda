@@ -132,8 +132,8 @@ namespace KikaKidsModa.Views
 
         public async Task<bool> HasForeign()
         {
-            return (await Synchro.tbRetirada.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0 ||
-                   (await Synchro.tbVenda.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0;
+            return (await Synchro.tbRetirada.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0
+            || (await Synchro.tbItem.ReadAsync()).Where(v => v.CodigoProduto == Prod.Codigo).Count() > 0;
         }
 
 
@@ -216,13 +216,13 @@ namespace KikaKidsModa.Views
                 }
             }
             foreach (var venda in vendas)
-            {
+            {/*
                 if (venda.CodigoProduto == codigoAntigo)
                 {
                     venda.CodigoProduto = Prod.Codigo;
                     await Control.VendaControl.Update(venda);
                 }
-            }
+*/            }
         }
 
         public async Task<bool> SemUnique()

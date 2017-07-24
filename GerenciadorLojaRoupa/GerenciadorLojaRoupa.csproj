@@ -160,6 +160,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Atualizar.cs" />
+    <Compile Include="Control\ItemControl.cs" />
     <Compile Include="Control\ProdutoControl.cs" />
     <Compile Include="Control\RetiradaControl.cs" />
     <Compile Include="Control\VendaControl.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="CustomHandler.cs" />
     <Compile Include="Model\Caixa.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Produto.cs" />
     <Compile Include="Model\Relatorio.cs" />
     <Compile Include="Model\RelatorioVenda.cs" />

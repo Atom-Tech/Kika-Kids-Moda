@@ -22,6 +22,7 @@ namespace KikaKidsModa
         public static IMobileServiceSyncTable<Retirada> tbRetirada { get; } = App.banco.GetSyncTable<Retirada>();
         public static IMobileServiceSyncTable<Cliente> tbCliente { get; } = App.banco.GetSyncTable<Cliente>();
         public static IMobileServiceSyncTable<Venda> tbVenda { get; } = App.banco.GetSyncTable<Venda>();
+        public static IMobileServiceSyncTable<Item> tbItem { get; } = App.banco.GetSyncTable<Item>();
 
         public static async Task InitLocalStoreAsync()
         {
@@ -37,6 +38,7 @@ namespace KikaKidsModa
                 store.DefineTable<Retirada>();
                 store.DefineTable<Cliente>();
                 store.DefineTable<Venda>();
+                store.DefineTable<Item>();
                 await App.banco.SyncContext.InitializeAsync(store, new CustomHandler());
             }
             await SyncAsync();
@@ -54,9 +56,32 @@ namespace KikaKidsModa
                 await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
                 await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
                 await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
+                await tbItem.PullAsync("tbItem", tbItem.CreateQuery());
             }
         }
 
         public static DateTime ToDay(this string day) => DateTime.Parse(day);
+
+        public static int ToIndex(this string item)
+        {
+            switch (item)
+            {
+                case "Crédito": return 0;
+                case "Débito": return 1;
+                case "Dinheiro": return 2;
+                default: return 3;
+            }
+        }
+
+        public static string FromIndex(this int index)
+        {
+            switch (index)
+            {
+                case 0: return "Crédito";
+                case 1: return "Débito";
+                case 2: return "Dinheiro";
+                default: return "À Vista";
+            }
+        }
     }
 }

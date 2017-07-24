@@ -78,6 +78,7 @@ namespace KikaKidsModa.Views
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
+            var itemsHoje = new List<Model.Item>();
             if ((await Synchro.tbCaixa.ReadAsync())
                 .Where(c => c.DataCaixa == DateTime.Today.ToShortDateString()).Count() == 0)
             {
@@ -110,9 +111,19 @@ namespace KikaKidsModa.Views
                 string vendas = "";
                 foreach (var v in vendasHoje)
                 {
-                    vendas += $"\n{v.QuantidadeProduto} unidades de " +
-                        $"{await Model.Produto.GetNome(v.CodigoProduto)} foi vendido para " +
-                        $"{await Model.Cliente.GetNome(v.CPFCliente)} por R${v.Valor}";
+                    var items = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == v.Id);
+                    if (items.Count() > 0)
+                    {
+                        foreach (var item in items)
+                        {
+                            itemsHoje.Add(item);
+                        }
+                    }
+                }
+                foreach (var item in itemsHoje)
+                {
+                    vendas += $"\n{item.QuantidadeProduto} unidades de " +
+                        $"{await Model.Produto.GetNome(item.CodigoProduto)} foi vendido por R${item.ValorProduto}";
                 }
                 Vendas.Text = vendas;
             }

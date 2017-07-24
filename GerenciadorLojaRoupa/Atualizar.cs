@@ -104,13 +104,17 @@ namespace KikaKidsModa
 
         public bool VerificarAtualizacao()
         {
-            XmlSerializer xml = new XmlSerializer(v.GetType());
-            WebClient client = new WebClient();
-            client.Encoding = Encoding.UTF8;
-            string data = Encoding.UTF8.GetString(client.DownloadData("https://pastebin.com/raw/Gj6EZDre"));
-            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-            v = (Version)xml.Deserialize(stream);
-            return v.Versao != versao.Text.Replace("Versão ", "");
+            if (Main.HasInternet)
+            {
+                XmlSerializer xml = new XmlSerializer(v.GetType());
+                WebClient client = new WebClient();
+                client.Encoding = Encoding.UTF8;
+                string data = Encoding.UTF8.GetString(client.DownloadData("https://pastebin.com/raw/Gj6EZDre"));
+                Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+                v = (Version)xml.Deserialize(stream);
+                return v.Versao != versao.Text.Replace("Versão ", "");
+            }
+            return false;
         }
     }
 }

@@ -9,77 +9,6 @@
       d:DesignHeight="700" d:DesignWidth="600" Background="White"
       Title="Usuario">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <DockPanel Grid.RowSpan="2">
-            <TextBlock Text="Lista de Vendas" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-            <DockPanel DockPanel.Dock="Bottom">
-                <ListView x:Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged">
-                    <ListView.Resources>
-                        <local:BackConverter x:Key="BackConverter"/>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                        <Border
-                         BorderBrush="Black"
-                         BorderThickness="1"
-                         Background="{TemplateBinding Background}">
-                                            <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Antes">
-                                    <Setter Property="Background" Value="Pink"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Agora">
-                                    <Setter Property="Background" Value="LightYellow"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=DataPrestacao, Converter={StaticResource BackConverter}}" Value="Depois">
-                                    <Setter Property="Background" Value="LightGreen"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=Pago, Converter={StaticResource BackConverter}}" Value="true">
-                                    <Setter Property="Background" Value="LightGreen"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Vendas">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Path=Data}" Foreground="Black"/>
-                                            <TextBlock Text=" - " Foreground="Black"/>
-                                            <TextBlock Text="{Binding Path=CPFCliente}" Foreground="Black"/>
-                                            <TextBlock Text=" comprou " Foreground="Black"/>
-                                            <TextBlock Text="{Binding Path=CodigoProduto}" Foreground="Black"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </DockPanel>
-        </DockPanel>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,3,0,3">
-            <Button x:Name="Novo" Template="{DynamicResource ButtonTemplateLeft}" Content="Novo" Padding="3" Click="Novo_Click"/>
-            <Button x:Name="Pagar" Template="{DynamicResource ButtonTemplateRight}" Content="Pagar" Padding="3" Click="Pagar_Click"/>
-        </StackPanel>
-        <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -94,7 +23,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <GroupBox Header="Produtos" BorderBrush="SteelBlue" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                <ListView x:Name="ListaProdutos" ItemsSource="{Binding}" SelectionChanged="ListaProdutos_SelectionChanged">
+                <ListView x:Name="ListaProdutos" ItemsSource="{Binding}" SelectionMode="Multiple" SelectionChanged="ListaProdutos_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -119,15 +48,36 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </GroupBox>
-            <TextBlock Text="Valor de Entrada: " Grid.Row="2" VerticalAlignment="Center" Margin="0,0,0,60" HorizontalAlignment="Left"/>
-            <xctk:DoubleUpDown Name="CampoValor" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,60" Minimum="0" ValueChanged="CampoValor_ValueChanged"/>
-            <TextBlock Text="Data da Prestação:" Grid.Row="2" VerticalAlignment="Center" Margin="0,60,0,0" HorizontalAlignment="Left"/>
-            <xctk:DateTimePicker Name="CampoPrestacao" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,60,0,0" ValueChanged="CampoPrestacao_ValueChanged" Format="ShortDate"/>
-            <TextBlock Text="Quantidade: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,60"/>
-            <xctk:IntegerUpDown Name="CampoQuantidade" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoQuantidade_ValueChanged" Margin="0,0,0,60"/>
-            <TextBlock Text="Parcelas: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,60,0,0"/>
-            <xctk:IntegerUpDown Name="CampoParcelas" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" Minimum="1" Margin="0,60,0,0" ValueChanged="CampoParcelas_ValueChanged"/>
-            <xctk:DoubleUpDown Name="CampoParcelado" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False" Margin="70,60,0,0"/>
+            <GroupBox Header="Produtos Selecionados" Grid.Row="2" Grid.ColumnSpan="4" BorderBrush="SteelBlue">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ListView Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged" Grid.RowSpan="4">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Codigo}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding Nome}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBlock Text="Quantidade: " Margin="10,0,0,0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <xctk:IntegerUpDown Name="CampoQuantidadeProduto" Minimum="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="70" ValueChanged="CampoQuantidadeProduto_ValueChanged"/>
+                    <TextBlock Text="Valor: " Margin="10,0,0,0" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <xctk:DoubleUpDown Name="CampoValorProduto" Minimum="0" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="70" IsEnabled="False"/>
+                </Grid>
+            </GroupBox>
             <Grid Grid.Row="3" Grid.ColumnSpan="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -141,21 +91,29 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Data da Venda: " VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Name="CampoData" IsEnabled="False" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
-                <TextBlock Text="Valor Total: " Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <xctk:DoubleUpDown Name="CampoValorTotal" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False"/>
-                <TextBlock Text="Desconto:" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <xctk:IntegerUpDown Maximum="100" Minimum="0" Name="CampoPorcentagem" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" ValueChanged="CampoPorcentagem_ValueChanged"/>
-                <TextBlock Text="Valor Total com Desconto: " Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3,0,3,0"/>
-                <xctk:DoubleUpDown Name="CampoValorDesconto" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False"/>
-                <TextBlock Text="Método de Pagamento: " Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="Valor de Entrada: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <xctk:DoubleUpDown Name="CampoValor" Grid.Column="1" VerticalAlignment="Center" Minimum="0" ValueChanged="CampoValor_ValueChanged"/>
+                <TextBlock Text="Data da Prestação:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <xctk:DateTimePicker Name="CampoPrestacao" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" ValueChanged="CampoPrestacao_ValueChanged" Format="ShortDate"/>
+                <TextBlock Text="Parcelas: " Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <xctk:IntegerUpDown Name="CampoParcelas" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" Minimum="1" ValueChanged="CampoParcelas_ValueChanged"/>
+                <xctk:DoubleUpDown Name="CampoParcelado" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False" Margin="70,0,0,0"/>
+                <TextBlock Text="Data da Venda: " Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <TextBox Name="CampoData" IsEnabled="False" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBlock Text="Valor Total: " Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <xctk:DoubleUpDown Name="CampoValorTotal" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBlock Text="Desconto:" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <xctk:IntegerUpDown Maximum="100" Minimum="0" Name="CampoPorcentagem" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" ValueChanged="CampoPorcentagem_ValueChanged"/>
+                <TextBlock Text="Valor Total com Desconto: " Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                <xctk:DoubleUpDown Name="CampoValorDesconto" Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False"/>
+                <TextBlock Text="Método de Pagamento: " Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                 <ComboBox Name="CampoMetodo" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" SelectionChanged="CampoMetodo_SelectionChanged">
                     <ComboBoxItem Content="Crédito"/>
                     <ComboBoxItem Content="Débito"/>
+                    <ComboBoxItem Content="Dinheiro"/>
+                    <ComboBoxItem Content="À Vista"/>
                 </ComboBox>
             </Grid>
             <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
-    </Grid>
 </Page>

@@ -22,8 +22,9 @@ namespace KikaKidsModa.Views
     public partial class Venda : Page
     {
         public static string ClienteCadastrado = null;
-        int op = 0;
         Model.Venda Vend;
+        List<Model.Produto> Produtos = new List<Model.Produto>();
+        List<Model.Item> Items = new List<Model.Item>();
 
         public Venda()
         {
@@ -32,90 +33,43 @@ namespace KikaKidsModa.Views
             Loaded += Page_Loaded;
         }
 
-        public Venda(Model.Venda venda)
-        {
-            InitializeComponent();
-            DataContext = this;
-            Vend = venda;
-            Loaded += Page1_Loaded;
-        }
-
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
             ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
-            Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-            AtivarCampos(false);
-            Vend = new Model.Venda();
-        }
-
-        private async void Page1_Loaded(object sender, RoutedEventArgs e)
-        {
-            ListaProdutos.ItemsSource = await Synchro.tbProduto.ReadAsync();
-            ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
-            Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-            AtivarCampos(false);
-            foreach (Model.Venda v in Lista.Items)
+            Vend = new Model.Venda()
             {
-                if (v.Id == Vend.Id)
-                {
-                    Lista.SelectedItem = v;
-                    break;
-                }
-            }
-        }
-
-        private async void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Lista.SelectedItem is Model.Venda && Lista.SelectedItem != null)
-            {
-                ListaProdutos.SelectedIndex = -1;
-                ListaClientes.SelectedIndex = -1;
-                Vend = (Model.Venda)Lista.SelectedItem;
-                await Vend.Load();
-                CampoMetodo.SelectedIndex = Vend.FormaPagamento == "Crédito" ? 0 : 1;
-                CampoQuantidade.Maximum = Vend.Produto?.Quantidade;
-                CampoQuantidade.Value = Vend.QuantidadeProduto;
-                CampoData.Text = Vend.Data;
-                CampoValor.Value = Vend.ValorEntrada;
-                CampoValorDesconto.Value = Vend.Valor;
-                CampoValorTotal.Value = Vend.Valor;
-                CampoPorcentagem.Value = Vend.PorcentagemDesconto;
-                CampoParcelas.Value = Vend.Parcelas;
-                CampoPrestacao.Minimum = new DateTime(2017, 1, 1);
-                CampoPrestacao.Value = DateTime.Parse(Vend.DataPrestacao);
-                Pagar.IsEnabled = !Vend.Pago;
-                if (Vend.Produto != null)
-                    foreach (Model.Produto p in ListaProdutos.Items)
-                    {
-                        if (p.Codigo == Vend.Produto.Codigo)
-                        {
-                            ListaProdutos.SelectedItem = p;
-                            break;
-                        }
-                    }
-                if (Vend.Cliente != null)
-                    foreach (Model.Cliente c in ListaClientes.Items)
-                    {
-                        if (c.CPF == Vend.Cliente.CPF)
-                        {
-                            ListaClientes.SelectedItem = c;
-                            break;
-                        }
-                    }
-            }
-            AtivarCampos(false);
+                Data = DateTime.Today.ToShortDateString(),
+                FormaPagamento = "Crédito"
+            };
+            CampoParcelas.Value = 1;
+            CampoMetodo.SelectedIndex = 0;
+            CampoValor.Value = 0;
+            CampoPorcentagem.Value = 0;
+            CampoPrestacao.Value = DateTime.Today;
+            CampoPrestacao.Minimum = DateTime.Today;
+            ListaProdutos.SelectedIndex = -1;
+            ListaClientes.SelectedIndex = -1;
         }
 
         private void ListaProdutos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListaProdutos.SelectedItem is Model.Produto && ListaProdutos.SelectedItem != null)
             {
-                Vend.Produto = (Model.Produto)ListaProdutos.SelectedItem;
-                Vend.CodigoProduto = Vend.Produto.Codigo;
-                CampoQuantidade.Maximum = ((Model.Produto)ListaProdutos.SelectedItem).Quantidade;
-                if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
-                CalcularValorTotal();
+                Lista.ItemsSource = null;
+                Produtos = new List<Model.Produto>();
+                Items = new List<Model.Item>();
+                foreach (var i in ListaProdutos.SelectedItems)
+                {
+                    Produtos.Add((Model.Produto)i);
+                    Items.Add(new Model.Item()
+                    {
+                        QuantidadeProduto = 0,
+                        ValorProduto = 0,
+                        CodigoProduto = ((Model.Produto)i).Codigo
+                    });
+                }
+                Lista.ItemsSource = Produtos;
             }
         }
 
@@ -126,39 +80,6 @@ namespace KikaKidsModa.Views
                 Vend.Cliente = (Model.Cliente)ListaClientes.SelectedItem;
                 Vend.CPFCliente = Vend.Cliente.CPF;
             }
-        }
-
-        private void Novo_Click(object sender, RoutedEventArgs e)
-        {
-            op = 1;
-            Vend = new Model.Venda()
-            {
-                Data = DateTime.Today.ToShortDateString(),
-                FormaPagamento = "Crédito"
-            };
-            CampoParcelas.Value = 1;
-            CampoQuantidade.Value = 0;
-            CampoMetodo.SelectedIndex = 0;
-            CampoValor.Value = 0;
-            CampoPorcentagem.Value = 0;
-            CampoPrestacao.Value = DateTime.Today;
-            CampoPrestacao.Minimum = DateTime.Today;
-            AtivarCampos(true);
-            ListaProdutos.SelectedIndex = -1;
-            ListaClientes.SelectedIndex = -1;
-        }
-
-        public void AtivarCampos(bool vf)
-        {
-            CampoQuantidade.IsEnabled = vf;
-            ListaProdutos.IsEnabled = vf;
-            ListaClientes.IsEnabled = vf;
-            CampoMetodo.IsEnabled = vf;
-            BotaoSalvar.IsEnabled = vf;
-            CampoValor.IsEnabled = vf;
-            CampoPrestacao.IsEnabled = vf;
-            CampoParcelas.IsEnabled = vf;
-            CampoPorcentagem.IsEnabled = vf;
         }
 
         private async void BotaoSalvar_Click(object sender, RoutedEventArgs e)
@@ -177,11 +98,9 @@ namespace KikaKidsModa.Views
                             Vend.CPFCliente = ClienteCadastrado;
                             if (await InsertUpdate())
                             {
-                                Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
                                 ListaClientes.ItemsSource = await Synchro.tbCliente.ReadAsync();
-                                op = 0;
                                 await ReduzirQuantidade();
-                                AtivarCampos(false);
+                                Retornar();
                             }
                         }
                     }
@@ -189,10 +108,8 @@ namespace KikaKidsModa.Views
                     {
                         if (await InsertUpdate())
                         {
-                            Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-                            op = 0;
                             await ReduzirQuantidade();
-                            AtivarCampos(false);
+                            Retornar();
                         }
                     }
                 }
@@ -200,10 +117,8 @@ namespace KikaKidsModa.Views
                 {
                     if (await InsertUpdate())
                     {
-                        Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-                        op = 0;
                         await ReduzirQuantidade();
-                        AtivarCampos(false);
+                        Retornar();
                     }
                 }
             }
@@ -214,28 +129,51 @@ namespace KikaKidsModa.Views
             ClienteCadastrado = null;
         }
 
+        public void Retornar()
+        {
+            var message = MessageBox.Show("Deseja cadastrar mais uma venda?", "Aviso", MessageBoxButton.YesNo);
+            if (message == MessageBoxResult.Yes)
+            {
+                Main.HM.Content[0].IsSelected = true;
+                Main.HM.Content[8].IsSelected = true;
+            }
+            else
+                Main.HM.Content[0].IsSelected = true;
+        }
+
 
         public async Task<bool> InsertUpdate()
         {
-            switch (op)
+            await Control.VendaControl.Insert(Vend);
+            MessageBox.Show("Produto vendido com sucesso!");
+            var venda = (await Synchro.tbVenda.ReadAsync()).LastOrDefault();
+            for (int i = 0; i < Items.Count; i++)
             {
-                case 1: //Novo
-                    await Control.VendaControl.Insert(Vend);
-                    MessageBox.Show("Produto vendido com sucesso!");
-                    return true;
+                Items[i].CodigoVenda = venda.Id;
+                await Control.ItemControl.Insert(Items[i]);
             }
-            return false;
+            return true;
         }
 
         public async Task ReduzirQuantidade()
         {
-            var produto = Vend.Produto;
-            produto.Quantidade -= Vend.QuantidadeProduto;
-            await Synchro.tbProduto.UpdateAsync(produto);
+            foreach (var item in Items)
+            {
+                var produto = (await Synchro.tbProduto.ReadAsync()).Where(p => p.Codigo == item.CodigoProduto).FirstOrDefault();
+                produto.Quantidade -= item.QuantidadeProduto;
+                await Synchro.tbProduto.UpdateAsync(produto);
+            }
         }
 
-        public bool VerificarCamposVazios() => CampoQuantidade.Value != 0 && CampoValor.Value != 0
-            && Vend.CodigoProduto != null;
+        public bool VerificarCamposVazios()
+        {
+            bool ver = Items.Count > 0;
+            foreach (var i in Items)
+            {
+                if (i.QuantidadeProduto == 0 || i.ValorProduto == 0) ver = false;
+            }
+            return ver;
+        }
 
 
         private void CampoValor_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -245,27 +183,26 @@ namespace KikaKidsModa.Views
             CalcularValorTotal();
         }
 
-        private void CampoQuantidade_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (CampoQuantidade.Maximum < CampoQuantidade.Value) CampoQuantidade.Value = CampoQuantidade.Maximum;
-            Vend.QuantidadeProduto = CampoQuantidade.Value.Value;
-            CalcularValorTotal();
-        }
-
         public void CalcularValorTotal()
         {
-            if (Vend.Produto != null)
-            {
-                Vend.Valor = Vend.QuantidadeProduto * Vend.Produto.Valor;
-                CampoValorTotal.Value = Vend.Valor;
-                CalcularParcela();
-                CalcularPorcentagem();
-            }
+            Vend.Valor = Items.Sum(i => i.ValorProduto);
+            CampoValorTotal.Value = Vend.Valor;
+            CalcularParcela();
+            CalcularPorcentagem();
         }
 
         private void CampoMetodo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Vend.FormaPagamento = CampoMetodo.SelectedIndex == 0 ? "Crédito" : "Débito";
+            Vend.FormaPagamento = CampoMetodo.SelectedIndex.FromIndex();
+            if (CampoMetodo.SelectedIndex == 0)
+            {
+                CampoPorcentagem.Value = 0;
+                CampoPorcentagem.IsEnabled = false;
+            }
+            else
+            {
+                CampoPorcentagem.IsEnabled = true;
+            }
         }
 
         private void CampoPrestacao_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -281,7 +218,7 @@ namespace KikaKidsModa.Views
 
         public void CalcularParcela()
         {
-            CampoParcelado.Value = (Vend.Valor-Vend.ValorEntrada) / Vend.Parcelas;
+            CampoParcelado.Value = (Vend.Valor - Vend.ValorEntrada) / Vend.Parcelas;
         }
 
         private void CampoPorcentagem_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -296,16 +233,26 @@ namespace KikaKidsModa.Views
             Vend.ValorTotalDesconto = CampoValorDesconto.Value.Value;
         }
 
-        private async void Pagar_Click(object sender, RoutedEventArgs e)
+        private void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Vend.Id != null)
+            if (Lista.Items.Count > 0 && Lista.SelectedIndex != -1)
             {
-                Vend.Pago = true;
-                await Control.VendaControl.Update(Vend);
-                Main.Caixa.ValorAcumulado += (Vend.Valor - Vend.ValorEntrada) / Vend.Parcelas;
-                await Control.CaixaControl.Update(Main.Caixa);
-                Lista.ItemsSource = await Synchro.tbVenda.ReadAsync();
-                Pagar.IsEnabled = false;
+                var item = Items[Lista.SelectedIndex];
+                var produto = (Model.Produto)Lista.SelectedItem;
+                CampoQuantidadeProduto.Maximum = produto.Quantidade;
+                CampoQuantidadeProduto.Value = item.QuantidadeProduto;
+            }
+        }
+
+        private void CampoQuantidadeProduto_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (Lista.Items.Count > 0 && Lista.SelectedIndex != -1 && CampoQuantidadeProduto.Value.HasValue)
+            {
+                Items[Lista.SelectedIndex].QuantidadeProduto = CampoQuantidadeProduto.Value.Value;
+                CampoValorProduto.Value = Items[Lista.SelectedIndex].QuantidadeProduto
+                    * ((Model.Produto)Lista.Items[Lista.SelectedIndex]).Valor;
+                Items[Lista.SelectedIndex].ValorProduto = CampoValorProduto.Value.Value;
+                CalcularValorTotal();
             }
         }
     }
