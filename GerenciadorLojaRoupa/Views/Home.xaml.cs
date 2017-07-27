@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,7 @@ namespace KikaKidsModa.Views
     /// </summary>
     public partial class Home : Page
     {
+
         public Home()
         {
             InitializeComponent();
@@ -33,6 +36,7 @@ namespace KikaKidsModa.Views
                 $"{Main.Caixa.ValorAbertura + Main.Caixa.ValorAcumulado - Main.Caixa.ValorSangria}";
             ComboProduto.ItemsSource = await Synchro.tbProduto.ReadAsync();
             await CarregarNotificacoes();
+            File.Delete(Nota.Caminho);
         }
 
         public async Task CarregarNotificacoes()
@@ -88,6 +92,18 @@ namespace KikaKidsModa.Views
                 var venda = (Model.Venda)ListaPrest.SelectedItem;
                 BotaoPagar.IsEnabled = !venda.Pago;
             }
+        }
+
+        private void GerarNotaPromissoria_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(Nota.Caminho))
+            {
+                string caminho = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Nota Promissória.pdf");
+                File.Copy(Nota.Caminho, caminho, true);
+                Process.Start(caminho);
+            }
+            else MessageBox.Show("Erro na hora de gerar PDF", "Aviso");
         }
     }
 

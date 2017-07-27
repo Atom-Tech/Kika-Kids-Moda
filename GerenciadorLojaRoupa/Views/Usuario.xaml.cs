@@ -122,7 +122,7 @@ namespace KikaKidsModa.Views
                 if (message == MessageBoxResult.Yes)
                 {
                     await Control.UsuarioControl.Delete(User);
-                    Lista.ItemsSource = await Synchro.tbUsuario.ReadAsync();
+                    Lista.ItemsSource = (await Synchro.tbUsuario.ReadAsync()).Where(u => u.Id != Main.usuarioLogado.Id);
                     MessageBox.Show("Usuário deletado com sucesso!");
                 }
             }

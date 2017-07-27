@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,5 +36,7 @@ namespace KikaKidsModa.Model
         public int QuantidadeProduto { get; set; }
         [JsonProperty(PropertyName = "vlProduto")]
         public double ValorProduto { get; set; }
+        [Version]
+        public byte[] Version { get; set; }
     }
 }

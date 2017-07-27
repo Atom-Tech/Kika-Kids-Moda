@@ -46,17 +46,39 @@ namespace KikaKidsModa
 
         public static async Task SyncAsync()
         {
-            if (Main.HasInternet)
+            ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
+            try
             {
-                await App.banco.SyncContext.PushAsync();
-                await tbCaixa.PullAsync("tbCaixa", tbCaixa.CreateQuery());
-                await tbUsuario.PullAsync("tbUsuario", tbUsuario.CreateQuery());
-                await tbProduto.PullAsync("tbProduto", tbProduto.CreateQuery());
-                await tbVendedor.PullAsync("tbVendedor", tbVendedor.CreateQuery());
-                await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
-                await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
-                await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
-                await tbItem.PullAsync("tbItem", tbItem.CreateQuery());
+                if (Main.HasInternet)
+                {
+                    await App.banco.SyncContext.PushAsync();
+                    await tbCaixa.PullAsync("tbCaixa", tbCaixa.CreateQuery());
+                    await tbUsuario.PullAsync("tbUsuario", tbUsuario.CreateQuery());
+                    await tbProduto.PullAsync("tbProduto", tbProduto.CreateQuery());
+                    await tbVendedor.PullAsync("tbVendedor", tbVendedor.CreateQuery());
+                    await tbRetirada.PullAsync("tbRetirada", tbRetirada.CreateQuery());
+                    await tbCliente.PullAsync("tbCliente", tbCliente.CreateQuery());
+                    await tbVenda.PullAsync("tbVenda", tbVenda.CreateQuery());
+                    await tbItem.PullAsync("tbItem", tbItem.CreateQuery());
+                }
+            }
+            catch (MobileServicePushFailedException ex)
+            {
+                if (ex.PushResult != null) syncErrors = ex.PushResult.Errors;
+            }
+            if (syncErrors != null)
+            {
+                foreach (var error in syncErrors)
+                {
+                    if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
+                    {
+                        await error.CancelAndUpdateItemAsync(error.Result);
+                    }
+                    else
+                    {
+                        await error.CancelAndDiscardItemAsync();
+                    }
+                }
             }
         }
 

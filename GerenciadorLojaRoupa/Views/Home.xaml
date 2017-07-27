@@ -42,6 +42,7 @@
                 <xctk:IntegerUpDown Name="QuantidadeEstoque" Minimum="0" MinWidth="100" Margin="3" Value="0"/>
             </StackPanel>
         </GroupBox>
+        <Button Name="GerarNotaPromissoria" Grid.Column="1" Grid.Row="2" Template="{DynamicResource ButtonTemplate}" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="3" Content="Abrir Nota Promissória" Margin="5" Click="GerarNotaPromissoria_Click"/>
         <GroupBox Header="Notificações" Grid.ColumnSpan="2" Grid.Row="3">
             <Grid>
                 <Grid.RowDefinitions>

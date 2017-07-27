@@ -42,6 +42,9 @@
     <Reference Include="HamburgerMenu, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HamburgerMenu.0.1.0\lib\net40\HamburgerMenu.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.Mobile.Client, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Mobile.Client.4.0.1\lib\net45\Microsoft.Azure.Mobile.Client.dll</HintPath>
     </Reference>
@@ -159,7 +162,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Atualizar.cs" />
+    <Compile Include="Classes\Atualizar.cs" />
     <Compile Include="Control\ItemControl.cs" />
     <Compile Include="Control\ProdutoControl.cs" />
     <Compile Include="Control\RetiradaControl.cs" />
@@ -168,8 +171,8 @@
     <Compile Include="Control\VendedorControl.cs" />
     <Compile Include="Control\UsuarioControl.cs" />
     <Compile Include="Control\CaixaControl.cs" />
-    <Compile Include="Criptografar.cs" />
-    <Compile Include="CustomHandler.cs" />
+    <Compile Include="Classes\Criptografar.cs" />
+    <Compile Include="Classes\CustomHandler.cs" />
     <Compile Include="Model\Caixa.cs" />
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Item.cs" />
@@ -182,9 +185,10 @@
     <Compile Include="Model\Usuario.cs" />
     <Compile Include="Model\Venda.cs" />
     <Compile Include="Model\Vendedor.cs" />
-    <Compile Include="Synchro.cs" />
-    <Compile Include="Validar.cs" />
-    <Compile Include="Version.cs" />
+    <Compile Include="Classes\Nota.cs" />
+    <Compile Include="Classes\Synchro.cs" />
+    <Compile Include="Classes\Validar.cs" />
+    <Compile Include="Model\Version.cs" />
     <Compile Include="Views\Caixa.xaml.cs">
       <DependentUpon>Caixa.xaml</DependentUpon>
     </Compile>
@@ -358,6 +362,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Imagens\Update-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Imagens\NotaPromissoria.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.2\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
