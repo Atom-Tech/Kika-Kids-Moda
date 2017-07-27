@@ -124,7 +124,15 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Button Name="BotaoPagar" Grid.Row="1" Click="BotaoPagar_Click" Template="{DynamicResource ButtonTemplate}" Padding="3" Margin="3" VerticalAlignment="Bottom" Content="Pagar" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Border BorderBrush="Black" BorderThickness="2" Width="16" Height="16" Background="LightGreen"/>
+                    <TextBlock Text="Vendas Pagas" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                    <Border BorderBrush="Black" BorderThickness="2" Width="16" Height="16" Background="LightYellow" Margin="5,0,0,0"/>
+                    <TextBlock Text="Data da Prestação para Hoje" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                    <Border BorderBrush="Black" BorderThickness="2" Width="16" Height="16" Background="Pink" Margin="5,0,0,0"/>
+                    <TextBlock Text="Data da Prestação atrasada" VerticalAlignment="Center" Margin="3,0,10,0"/>
+                    <Button Name="BotaoPagar" Grid.Row="1" Click="BotaoPagar_Click" Template="{DynamicResource ButtonTemplate}" Margin="10,3,0,3" Padding="3" Content="Pagar"/>
+                </StackPanel>
             </Grid>
         </GroupBox>
     </Grid>
