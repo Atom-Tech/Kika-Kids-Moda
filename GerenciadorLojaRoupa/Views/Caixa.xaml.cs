@@ -97,7 +97,7 @@ namespace KikaKidsModa.Views
                 CampoAbertura.Value = caixa.ValorAbertura;
                 ValorSangria.Value = caixa.ValorSangria;
                 var valor = vendasHoje.Sum(v => v.Valor);
-                CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria;
+                CampoFechamento.Value = valor + caixa.ValorAbertura - caixa.ValorSangria + caixa.ValorAcumulado;
                 if (caixa.ValorAbertura != 0 && abrir)
                 {
                     Main.HM.Visibility = Visibility.Visible;

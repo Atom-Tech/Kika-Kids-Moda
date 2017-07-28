@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_13C6D1FB29814591BC117E8CBE7BE463"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_23AC972FB1C8453080AD003050DB6142"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -27,25 +33,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3B6F3235C97B44359ACDCD943058AAAD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5FCF4A5EF409428B90FA3CECFF74A38C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7191BAFDF1124D17910B09E6EF5807D0"
+        "MsmKey" = "8:_67897D7A1ADE475095CC72DEFE637660"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_81F945AD0C014E9E9A66966E4A0F48C6"
+        "MsmKey" = "8:_7191BAFDF1124D17910B09E6EF5807D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -63,7 +63,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\GerenciadorKikaKids.v1.0.5.msi"
+        "OutputFilename" = "8:Debug\\GerenciadorKikaKids.v1.0.6.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -150,10 +150,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23D9FE23AD4B40AD825310566667DC41"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13C6D1FB29814591BC117E8CBE7BE463"
             {
-            "SourcePath" = "8:..\\GerenciadorLojaRoupa\\bancokikakids.db"
-            "TargetName" = "8:bancokikakids.db"
+            "SourcePath" = "8:..\\..\\..\\..\\Nota Promissória.pdf"
+            "TargetName" = "8:Nota Promissória.pdf"
             "Tag" = "8:"
             "Folder" = "8:_4F250D0D80FE4990A1DF455CFBC9F1DC"
             "Condition" = "8:"
@@ -170,10 +170,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B6F3235C97B44359ACDCD943058AAAD"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23D9FE23AD4B40AD825310566667DC41"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\Nota Promissória.pdf"
-            "TargetName" = "8:Nota Promissória.pdf"
+            "SourcePath" = "8:..\\GerenciadorLojaRoupa\\bancokikakids.db"
+            "TargetName" = "8:bancokikakids.db"
             "Tag" = "8:"
             "Folder" = "8:_4F250D0D80FE4990A1DF455CFBC9F1DC"
             "Condition" = "8:"
@@ -210,12 +210,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7191BAFDF1124D17910B09E6EF5807D0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67897D7A1ADE475095CC72DEFE637660"
             {
-            "SourcePath" = "8:..\\GerenciadorLojaRoupa\\bin\\Debug\\x86\\e_sqlite3.dll"
-            "TargetName" = "8:e_sqlite3.dll"
+            "SourcePath" = "8:..\\..\\..\\..\\Nota Promissória.pdf"
+            "TargetName" = "8:Nota Promissória.pdf"
             "Tag" = "8:"
-            "Folder" = "8:_14E0437FCAB241A49916B9FAB570099E"
+            "Folder" = "8:_B56A36668F794246867906504F4815F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -230,12 +230,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_81F945AD0C014E9E9A66966E4A0F48C6"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7191BAFDF1124D17910B09E6EF5807D0"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\Nota Promissória.pdf"
-            "TargetName" = "8:Nota Promissória.pdf"
+            "SourcePath" = "8:..\\GerenciadorLojaRoupa\\bin\\Debug\\x86\\e_sqlite3.dll"
+            "TargetName" = "8:e_sqlite3.dll"
             "Tag" = "8:"
-            "Folder" = "8:_B56A36668F794246867906504F4815F1"
+            "Folder" = "8:_14E0437FCAB241A49916B9FAB570099E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -370,15 +370,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gerenciador Kika Kids"
-        "ProductCode" = "8:{EE7ABA52-0B56-417F-920C-04A9B3C78580}"
-        "PackageCode" = "8:{B1EEC138-78C8-4104-9385-D4406B64B4D4}"
+        "ProductCode" = "8:{D13CBAB4-26C8-4730-815D-F36994540DCA}"
+        "PackageCode" = "8:{EF8179AB-FAC9-4C32-928C-C6A4A0914BB7}"
         "UpgradeCode" = "8:{C49682C2-06D9-4B9B-808E-93F8AEA3E656}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:Atom Technology Company"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

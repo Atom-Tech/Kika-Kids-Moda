@@ -31,12 +31,12 @@ namespace KikaKidsModa.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            var vendasHoje = (await Synchro.tbVenda.ReadAsync()).Where(c => c.Data == DateTime.Today.ToShortDateString());
             Welcome.Text = $"Bem Vindo, {Main.usuarioLogado.Login}!";
             if (Main.Caixa != null) Caixa.Text = $"O dinheiro no caixa atualmente é R$" +
-                $"{Main.Caixa.ValorAbertura + Main.Caixa.ValorAcumulado - Main.Caixa.ValorSangria}";
+                $"{Main.Caixa.ValorAbertura + Main.Caixa.ValorAcumulado - Main.Caixa.ValorSangria + vendasHoje.Sum(v => v.Valor)}";
             ComboProduto.ItemsSource = await Synchro.tbProduto.ReadAsync();
             await CarregarNotificacoes();
-            File.Delete(Nota.Caminho);
         }
 
         public async Task CarregarNotificacoes()
