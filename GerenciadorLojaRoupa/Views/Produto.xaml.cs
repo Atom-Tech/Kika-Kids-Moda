@@ -47,10 +47,14 @@ namespace KikaKidsModa.Views
             }
             else
             {
-                CampoBuscaCodigo.Text = e.Codigo;
-                CampoBuscaCodigo.Focus();
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(() => { })).Wait();
-                if (Lista.Items.Count > 0) Lista.SelectedIndex = 0;
+                foreach (Model.Produto p in Lista.Items)
+                {
+                    if (p.Codigo == e.Codigo)
+                    {
+                        Lista.SelectedItem = p;
+                        break;
+                    }
+                }
             }
         }
 
