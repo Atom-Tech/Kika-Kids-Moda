@@ -50,10 +50,30 @@ namespace KikaKidsModa.Views
             CampoPrestacao.Minimum = DateTime.Today;
             ListaProdutos.SelectedIndex = -1;
             ListaClientes.SelectedIndex = -1;
+            Main.CodigoEscaneado += Main_CodigoEscaneado;
+        }
+
+        private void Main_CodigoEscaneado(object sender, ScannerEventArgs e)
+        {
+            for (int i = 0; i < ListaProdutos.Items.Count; i++)
+            {
+                var p = (Model.Produto)ListaProdutos.Items[i];
+                if (p.Codigo == e.Codigo)
+                {
+                    if (ListaProdutos.SelectedItems.Contains(p))
+                        ListaProdutos.SelectedItems.Remove(p);
+                    else
+                        ListaProdutos.SelectedItems.Add(p);
+                }
+            }
         }
 
         private void ListaProdutos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ListaProdutos.SelectedItems.Count == 0)
+            {
+                Lista.ItemsSource = null;
+            }
             if (ListaProdutos.SelectedItem is Model.Produto && ListaProdutos.SelectedItem != null)
             {
                 Lista.ItemsSource = null;

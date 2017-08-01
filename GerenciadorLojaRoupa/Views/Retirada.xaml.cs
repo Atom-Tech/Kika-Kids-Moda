@@ -35,6 +35,23 @@ namespace KikaKidsModa.Views
             ListaVendedores.ItemsSource = await Synchro.tbVendedor.ReadAsync();
             Lista.ItemsSource = await Synchro.tbRetirada.ReadAsync();
             AtivarCampos(false);
+            Main.CodigoEscaneado += Main_CodigoEscaneado;
+        }
+
+        private void Main_CodigoEscaneado(object sender, ScannerEventArgs e)
+        {
+            if (op == 1 || op == 2)
+            {
+                ListaProdutos.SelectedIndex = -1;
+                foreach (Model.Produto p in ListaProdutos.Items)
+                {
+                    if (p.Codigo == e.Codigo)
+                    {
+                        ListaProdutos.SelectedItem = p;
+                        break;
+                    }
+                }
+            }
         }
 
         private async void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)

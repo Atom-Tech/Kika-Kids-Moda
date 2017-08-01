@@ -64,7 +64,7 @@ namespace KikaKidsModa.Views
             }
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Main.HM.Visibility = Visibility.Collapsed;
         }

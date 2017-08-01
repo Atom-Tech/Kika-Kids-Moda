@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace KikaKidsModa
 {
@@ -25,6 +26,9 @@ namespace KikaKidsModa
     /// </summary>
     public partial class Main : Window
     {
+        public static event EventHandler<ScannerEventArgs> CodigoEscaneado;
+        LowLevelKeyboardListener _listener;
+        DispatcherTimer timer = new DispatcherTimer();
         private bool max = false;
         public static Model.Caixa Caixa;
         public static bool x = false;
@@ -62,6 +66,12 @@ namespace KikaKidsModa
                 Storyboard s = (Storyboard)this.Resources["UpdateBlink"];
                 s.Begin();
             }
+            _listener = new LowLevelKeyboardListener();
+            _listener.OnKeyPressed += _listener_OnKeyPressed;
+            _listener.HookKeyboard();
+            timer.Interval = new TimeSpan(3000000);
+            timer.IsEnabled = false;
+            timer.Tick += Timer_Tick;
         }
 
         public static bool CheckInternet()
@@ -247,12 +257,40 @@ namespace KikaKidsModa
                 }
             }
         }
-        
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (Invisivel.Text.Length == 13)
+            {
+                CodigoEscaneado?.Invoke(this, new ScannerEventArgs() { Codigo = Invisivel.Text });
+            }
+            else
+            {
+                timer.IsEnabled = false;
+            }
+            Invisivel.Text = "";
+        }
+
+        private void _listener_OnKeyPressed(object sender, KeyPressedArgs e)
+        {
+            if (Invisivel.Text.Length < 13)
+                Invisivel.Text += (char)KeyInterop.VirtualKeyFromKey(e.KeyPressed);
+        }
+
+        private void Invisivel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!timer.IsEnabled) timer.IsEnabled = true;
+        }
 
         private void TitleBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isMouseDown = false;
         }
 
+    }
+    
+    public class ScannerEventArgs
+    {
+        public string Codigo { get; set; }
     }
 }

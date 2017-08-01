@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace KikaKidsModa.Views
 {
@@ -35,6 +36,22 @@ namespace KikaKidsModa.Views
         {
             Lista.ItemsSource = await Synchro.tbProduto.ReadAsync();
             AtivarCampos(false);
+            Main.CodigoEscaneado += Main_CodigoEscaneado;
+        }
+
+        private void Main_CodigoEscaneado(object sender, ScannerEventArgs e)
+        {
+            if (op == 1 || op == 2)
+            {
+                CampoCodigo.Text = e.Codigo;
+            }
+            else
+            {
+                CampoBuscaCodigo.Text = e.Codigo;
+                CampoBuscaCodigo.Focus();
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(() => { })).Wait();
+                if (Lista.Items.Count > 0) Lista.SelectedIndex = 0;
+            }
         }
 
         private void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -99,12 +116,15 @@ namespace KikaKidsModa.Views
         private void Novo_Click(object sender, RoutedEventArgs e)
         {
             op = 1;
-            Prod = new Model.Produto();
+            Prod = new Model.Produto()
+            {
+                SiglaTamanho = "P"
+            };
             CampoCodigo.Text = "";
             CampoNome.Text = "";
             CampoDescricao.Text = "";
             CampoQuantidade.Value = 0;
-            CampoTamanho.SelectedIndex = 1;
+            CampoTamanho.SelectedIndex = 0;
             CampoValor.Value = 0;
             AtivarCampos(true);
         }

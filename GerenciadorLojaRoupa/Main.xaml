@@ -23,6 +23,7 @@
         </Style>
     </Window.Resources>
     <DockPanel>
+        <TextBox Name="Invisivel" Opacity="0" TextChanged="Invisivel_TextChanged" MaxLength="13" MaxHeight="0" MaxWidth="0"/>
         <DockPanel DockPanel.Dock="Top" Height="Auto" Background="SteelBlue" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" MouseLeftButtonUp="TitleBar_MouseLeftButtonUp" MouseMove="TitleBar_MouseMove">
             <Label Content="Gerenciador Kika Kids Moda" Margin="10,0,0,0" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
             <TextBlock Name="MensagemSync" Text="Conectado" FontSize="14" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White"/>
@@ -62,7 +63,7 @@
                    Margin="50,0,0,0"
                    NavigationUIVisibility="Hidden" DockPanel.Dock="Top"/>
                 <StatusBar Grid.Row="1" Height="23" BorderBrush="Gray" BorderThickness="1">
-                    <TextBlock x:Name="versao" Text="Versão 1.0.6" />
+                    <TextBlock x:Name="versao" Text="Versão 1.0.7" />
                     <Separator/>
                     <TextBlock Text="Baixando... " Visibility="{Binding Visibility, ElementName=barraProgresso}"/>
                     <TextBlock x:Name="porcentagem" Text="0%" Visibility="{Binding Visibility, ElementName=barraProgresso}"/>

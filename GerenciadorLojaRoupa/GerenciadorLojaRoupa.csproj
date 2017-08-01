@@ -163,6 +163,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Atualizar.cs" />
+    <Compile Include="Classes\LowLevelKeyboardListener.cs" />
     <Compile Include="Control\ItemControl.cs" />
     <Compile Include="Control\ProdutoControl.cs" />
     <Compile Include="Control\RetiradaControl.cs" />
