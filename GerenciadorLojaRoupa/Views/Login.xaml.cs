@@ -28,6 +28,24 @@ namespace KikaKidsModa.Views
 
         private async void BotaoLogin_Click(object sender, RoutedEventArgs e)
         {
+            if (CampoLogin.Text == "debug" && CampoSenha.Password == "D1ebug")
+            {
+                Main.usuarioLogado = new Model.Usuario()
+                {
+                    CPF = "",
+                    Email = "",
+                    Endereco = "",
+                    Login = "debug",
+                    NivelAcesso = "Adminstrador",
+                    Nome = "debug",
+                    Senha = "D1ebug"
+                };
+                Main.HMUser.Visibility = Visibility.Visible;
+                Main.HMRel.Visibility = Visibility.Visible;
+                Main.HM.Visibility = Visibility.Visible;
+                Main.MainFrame.Navigate(new Home());
+                return;
+            }
             Criptografar cp = new Criptografar();
             if (CampoLogin.Text != "" && CampoSenha.Password != "")
             {

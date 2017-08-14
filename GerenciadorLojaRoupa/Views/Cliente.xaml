@@ -20,11 +20,16 @@
         <DockPanel Grid.RowSpan="2">
             <TextBlock Text="Lista de Clientes" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
             <DockPanel DockPanel.Dock="Bottom">
-                <TextBox x:Name="CampoBusca" Style="{StaticResource placeHolder}" Tag="Buscar cliente por nome" Padding="3,0,3,0" Width="150" DockPanel.Dock="Bottom" TextChanged="CampoBusca_TextChanged"/>
+                <TextBox x:Name="CampoBusca" Style="{StaticResource placeHolder}" Tag="Buscar cliente por nome" Padding="3,0,3,0" DockPanel.Dock="Bottom" TextChanged="CampoBusca_TextChanged"/>
+                <TextBox x:Name="CampoBuscaCPF" Style="{StaticResource placeHolderC}" Tag="Buscar cliente por CPF" Padding="3,0,3,0" DockPanel.Dock="Bottom" TextChanged="CampoBuscaCPF_TextChanged" MaxLength="11"/>
                 <ListView x:Name="Lista" ItemsSource="{Binding}" SelectionChanged="Lista_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Nome}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Nome}"/>
+                                <TextBlock Text=" - "/>
+                                <TextBlock Text="{Binding CPF}"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -46,7 +51,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Nome:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left"/>
@@ -54,13 +59,16 @@
             <TextBlock Text="CPF:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2"/>
             <xctk:MaskedTextBox Name="CampoCPF" TextChanged="CampoCPF_TextChanged" Mask="###\.###\.###-##" Grid.Column="3" VerticalAlignment="Center" Height="23"/>
             <TextBlock Text="Endereço:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1"/>
-            <TextBox Name="CampoEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="23" TextChanged="CampoEnd_TextChanged" MaxLength="40"/>
+            <TextBox Name="CampoEnd" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="23" TextChanged="CampoEnd_TextChanged" MaxLength="100"/>
             <TextBlock Text="RG:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2"/>
             <xctk:MaskedTextBox Name="CampoRG" Grid.Column="3" Mask="00\.000\.000-0" Grid.Row="1" VerticalAlignment="Center" Height="23" TextChanged="CampoRG_TextChanged"/>
             <TextBlock Text="Email:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2"/>
-            <TextBox Name="CampoEmail" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoEmail_TextChanged" MaxLength="20"/>
+            <TextBox Name="CampoEmail" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoEmail_TextChanged" MaxLength="50"/>
             <TextBlock Text="Telefone:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
             <xctk:MaskedTextBox Name="CampoTel" Mask="(00)00000-0000" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoTel_TextChanged"/>
+            <GroupBox Header="" Grid.Row="3" Grid.ColumnSpan="4">
+                <DataGrid Name="TabelaCompras" IsReadOnly="True"/>
+            </GroupBox>
             <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
     </Grid>

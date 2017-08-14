@@ -160,8 +160,14 @@ namespace KikaKidsModa.Views
                     if (venda.Cliente != null)
                         View2.ItemsSource = new List<Model.Cliente>() { venda.Cliente };
                     else View2.ItemsSource = null;
-                    var items = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == venda.Id).ToList();                    
-                    View1.ItemsSource = items;
+                    var items = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == venda.Id).ToList();
+                    var lista = new List<dynamic>();
+                    foreach (var item in items)
+                    {
+                        await item.Load();
+                        lista.Add(new { Codigo = item.Produto.Codigo, Nome = item.Produto.Nome, Quantidade = item.QuantidadeProduto, Valor = item.ValorProduto, Data = item.Venda.Data, DataPrestacao = item.Venda.DataPrestacao });
+                    }
+                    View1.ItemsSource = lista;
                 }
                 if (row is Model.Retirada)
                 {

@@ -43,7 +43,7 @@ namespace KikaKidsModa.Views
             AtivarCampos(false);
         }
 
-        private void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Lista.SelectedItem is Model.Cliente && Lista.SelectedItem != null)
             {
@@ -55,8 +55,24 @@ namespace KikaKidsModa.Views
                 CampoRG.Text = Cli.RG;
                 CampoTel.Text = Cli.Telefone;
                 cpfAntigo = Cli.CPF;
+                await LoadCompras();
             }
             AtivarCampos(false);
+        }
+
+        public async Task LoadCompras()
+        {
+            var listas = (await Synchro.tbVenda.ReadAsync()).Where(v => v.CPFCliente == Cli.CPF);
+            var lista = new List<dynamic>();
+            foreach (var l in listas)
+            {
+                var list = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == l.Id);
+                foreach (var item in list){
+                    await item.Load();
+                    lista.Add(new { Codigo = item.Produto.Codigo, Nome = item.Produto.Nome, Quantidade = item.QuantidadeProduto, Valor = item.ValorProduto, Data = item.Venda.Data, DataPrestacao = item.Venda.DataPrestacao });
+                }
+            }
+            TabelaCompras.ItemsSource = lista;
         }
 
         private async void CampoBusca_TextChanged(object sender, TextChangedEventArgs e)
@@ -226,5 +242,25 @@ namespace KikaKidsModa.Views
         public bool VerificarCamposVazios() => CampoNome.Text != "" && CampoTel.IsMaskCompleted && CampoEnd.Text != ""
                 && cpfValido && CampoRG.IsMaskCompleted;
 
+        private async void CampoBuscaCPF_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Lista.ItemsSource = null;
+            if (CampoBuscaCPF.Text == "")
+            {
+                Lista.ItemsSource = await Synchro.tbCliente.ReadAsync();
+            }
+            else
+            {
+                string t = CampoBuscaCPF.Text;
+                string cpf = "";
+                for (int i = 0; i < t.Length; i++)
+                {
+                    cpf += t.Substring(i, 1);
+                    if (i == 2 || i == 5) cpf += ".";
+                    if (i == 8) cpf = "-";
+                }
+                Lista.ItemsSource = (await Synchro.tbCliente.ReadAsync()).Where(c => c.CPF.Contains(cpf));
+            }
+        }
     }
 }
