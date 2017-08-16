@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,7 +70,10 @@ namespace KikaKidsModa.Views
                 var list = (await Synchro.tbItem.ReadAsync()).Where(i => i.CodigoVenda == l.Id);
                 foreach (var item in list){
                     await item.Load();
-                    lista.Add(new { Codigo = item.Produto.Codigo, Nome = item.Produto.Nome, Quantidade = item.QuantidadeProduto, Valor = item.ValorProduto, Data = item.Venda.Data, DataPrestacao = item.Venda.DataPrestacao });
+                    lista.Add(new { Codigo = item.Produto.Codigo, Nome = item.Produto.Nome, Quantidade = item.QuantidadeProduto,
+                        Valor = item.ValorProduto, Data = item.Venda.Data, DataPrestacao = item.Venda.DataPrestacao,
+                        Parcelas = item.Venda.Parcelas, Desconto = item.Venda.PorcentagemDesconto, ValorTotalComDesconto = item.Venda.ValorTotalDesconto,
+                        Pago = item.Venda.Pago});
                 }
             }
             TabelaCompras.ItemsSource = lista;
@@ -260,6 +264,20 @@ namespace KikaKidsModa.Views
                     if (i == 8) cpf = "-";
                 }
                 Lista.ItemsSource = (await Synchro.tbCliente.ReadAsync()).Where(c => c.CPF.Contains(cpf));
+            }
+        }
+
+        private void TabelaCompras_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            dynamic item = e.Row.Item;
+            if (item != null)
+            {
+                if (item.Pago)
+                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+                else if (!item.Pago && item.DataPrestacao.ToDay() >= DateTime.Today)
+                    e.Row.Background = new SolidColorBrush(Colors.LightYellow);
+                else
+                    e.Row.Background = new SolidColorBrush(Colors.LightPink);
             }
         }
     }

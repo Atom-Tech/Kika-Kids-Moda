@@ -67,7 +67,7 @@
             <TextBlock Text="Telefone:" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
             <xctk:MaskedTextBox Name="CampoTel" Mask="(00)00000-0000" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Height="23" TextChanged="CampoTel_TextChanged"/>
             <GroupBox Header="" Grid.Row="3" Grid.ColumnSpan="4">
-                <DataGrid Name="TabelaCompras" IsReadOnly="True"/>
+                <DataGrid Name="TabelaCompras" IsReadOnly="True" LoadingRow="TabelaCompras_LoadingRow"/>
             </GroupBox>
             <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
         </Grid>
