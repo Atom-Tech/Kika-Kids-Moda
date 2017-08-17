@@ -223,6 +223,15 @@ namespace KikaKidsModa.Views
             {
                 CampoPorcentagem.IsEnabled = true;
             }
+            if (CampoMetodo.SelectedIndex == 3)
+            {
+                CampoParcelas.IsEnabled = true;
+            }
+            else
+            {
+                CampoParcelas.Value = 1;
+                CampoParcelas.IsEnabled = false;
+            }
         }
 
         private void CampoPrestacao_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

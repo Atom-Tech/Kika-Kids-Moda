@@ -274,7 +274,7 @@ namespace KikaKidsModa.Views
             {
                 if (item.Pago)
                     e.Row.Background = new SolidColorBrush(Colors.LightGreen);
-                else if (!item.Pago && item.DataPrestacao.ToDay() >= DateTime.Today)
+                else if (!item.Pago && DateTime.Parse(item.DataPrestacao) >= DateTime.Today)
                     e.Row.Background = new SolidColorBrush(Colors.LightYellow);
                 else
                     e.Row.Background = new SolidColorBrush(Colors.LightPink);

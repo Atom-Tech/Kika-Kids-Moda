@@ -111,7 +111,7 @@
                     <ComboBoxItem Content="Crédito"/>
                     <ComboBoxItem Content="Débito"/>
                     <ComboBoxItem Content="Dinheiro"/>
-                    <ComboBoxItem Content="À Vista"/>
+                    <ComboBoxItem Content="Parcelado"/>
                 </ComboBox>
             </Grid>
             <Button Name="BotaoSalvar" Grid.Row="4" Grid.ColumnSpan="4" VerticalAlignment="Center" Template="{DynamicResource ButtonTemplate}" Content="Salvar" Margin="3" Click="BotaoSalvar_Click"/>
